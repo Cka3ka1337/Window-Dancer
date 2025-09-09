@@ -21,7 +21,7 @@ def main():
     overlay.set_movie('resources/example.gif')
     overlay.set_scale(0.5)
     
-    overlay.show()
+    # overlay.show()
     window.show()
     
     sys.exit(app.exec())

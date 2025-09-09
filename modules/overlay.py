@@ -17,7 +17,7 @@ class MainOverlay(QMainWindow):
         # Setup window
         self.setWindowTitle('MainOverlay')
         # self.setGeometry(100, 100, 100, 100)
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)# | Qt.Tool)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         
         
