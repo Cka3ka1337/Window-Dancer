@@ -8,7 +8,7 @@ from modules.ui import MainWindow
 
 
 def main():
-    app = QApplication([])
+    app = QApplication(sys.argv)
     
     path = os.path.join(os.path.dirname(__file__), 'resources/style.qss')
     with open(path, 'r') as file:
@@ -17,6 +17,9 @@ def main():
     
     overlay = MainOverlay()
     window = MainWindow()
+    
+    overlay.destroyed.connect(lambda *e: print(1))
+    window.destroyed.connect(lambda *e: print(2))
     
     overlay.show()
     window.show()
