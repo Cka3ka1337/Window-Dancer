@@ -18,8 +18,8 @@ def main():
     overlay = MainOverlay()
     window = MainWindow()
     
-    overlay.destroyed.connect(lambda *e: print(1))
-    window.destroyed.connect(lambda *e: print(2))
+    overlay.set_movie('resources/example.gif')
+    overlay.set_scale(0.5)
     
     overlay.show()
     window.show()
