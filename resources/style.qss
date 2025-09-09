@@ -1,3 +1,6 @@
 QMainWindow {
     background-color: #263447;
 }
+MainOverlay {
+    background: transparent;
+}
