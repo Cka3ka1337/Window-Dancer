@@ -31,7 +31,6 @@ class MainWindow(QMainWindow):
         central_widget = QWidget()
         layout = QVBoxLayout(central_widget)
         
-        
         self.setCentralWidget(central_widget)
         layout.addWidget(TitleBar('Window Dancer'))
         layout.addStretch()
