@@ -1,13 +1,18 @@
+import os
+
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow
+    QApplication, QMainWindow, QWidget,
+    QVBoxLayout
 )
 from PySide6.QtCore import (
-    Qt, QTimer
+    Qt, QTimer, QPointF
 )
 from PySide6.QtGui import (
     QMouseEvent, QKeyEvent, QPainter,
-    QBrush, QColor, QPen
+    QBrush, QColor, QPen, QLinearGradient,
+    QPaintEvent
 )
+from .components.titlebar import TitleBar
 
 
 class MainWindow(QMainWindow):
@@ -17,18 +22,27 @@ class MainWindow(QMainWindow):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setWindowOpacity(0)
+        self.setFixedSize(200, 250)
         
         self._is_dragging = False
         self._drag_position = None
         self._opacity = self.windowOpacity()
         
+        central_widget = QWidget()
+        layout = QVBoxLayout(central_widget)
+        
+        
+        self.setCentralWidget(central_widget)
+        layout.addWidget(TitleBar('Window Dancer'))
+        layout.addStretch()
+        
         self.opening_timer = QTimer()
         self.opening_timer.timeout.connect(self.__opening_timer)
-        self.opening_timer.start(10)
-        
+        self.opening_timer.start(5)
+    
     
     def __opening_timer(self) -> None:
-        target_opacity = 0.9
+        target_opacity = 1
         step_scale = 0.1
         
         self._opacity += (target_opacity - self._opacity) * step_scale
@@ -41,18 +55,17 @@ class MainWindow(QMainWindow):
             self._opacity
         )
       
-    
-    def paintEvent(self, event) -> None:
-        palette = self.palette()
-        color = palette.color(self.backgroundRole())
-        
-        
+    def paintEvent(self, event: QPaintEvent) -> None:
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        rounded_rect = self.rect().adjusted(0, 0, 0, 0)
-        painter.setBrush(QBrush(QColor(color.name())))
-        painter.setPen(QPen(Qt.PenStyle.NoPen))
-        painter.drawRoundedRect(rounded_rect, 10, 10)
+        gradient = QLinearGradient(QPointF(0, 0), QPointF(self.width(), self.height()))
+        gradient.setColorAt(0.0, QColor(20, 10, 40, 240))
+        gradient.setColorAt(1.0, QColor(15, 30, 70, 200))
+        
+        
+        painter.setBrush(QBrush(gradient))
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.drawRoundedRect(self.rect(), 10, 10)
 
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
