@@ -9,5 +9,6 @@ from PySide6.QtCore import (
 class MainOverlay(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle('MainOverlay')
         
         # self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
