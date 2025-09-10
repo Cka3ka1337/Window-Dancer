@@ -2,34 +2,36 @@ MainOverlay {
     background: transparent;
 }
 
-ButtonMin {
-    background-color: #ffbd44;
-    border-radius: 6px;
-    width: 12px;
-    height: 12px;
-    border: none;
-}
-ButtonMin:hover {
-    background-color: #f0ad4e;
-}
-ButtonClose {
-    background-color: #ed6a5e;
-    border-radius: 6px;
-    width: 12px;
-    height: 12px;
-    border: none;
-}
-ButtonClose:hover {
-    background-color: #da5448;
-}
-
-TitleLabel {
+TitleBar QLabel {
     font-family: 'Cascadia code';
     color: #FFFFFF;
     font-size: 11px;
     padding: 2px 2px 2px 2px;
-    /* font-weight: bold; */
-    border: 1px solid #2f5f5f5f;
+    font-weight: bold;
+    border: 1px;
     border-radius: 5px;
-    background-color: #c00a0e14;
+    background-color: #494d4d4d;
+}
+
+MainGroup{
+    background-color: #b70e0622;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+ChoiceGifButton {
+    font-family: 'Cascadia code';
+    color: #FFFFFF;
+    font-size: 10px;
+    background-color: #4b474747;
+    border-radius: 3px;
+    padding: 5px;
+}
+ChoiceGifButton:hover {
+    background-color: #634e4e4e;
+}
+
+ChoiceGifButton:pressed {
+    background-color: #4b474747;
+    font-size: 9px;
 }
