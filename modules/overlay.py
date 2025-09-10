@@ -1,3 +1,7 @@
+import win32api
+import win32gui
+import win32con
+
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout,
     QLabel, QWidget
@@ -32,9 +36,15 @@ class MainOverlay(QMainWindow):
         central_widget.setLayout(layout)
     
     
+    def update_window_pos(self) -> None:
+        pass
+    
+    
     def set_movie(self, path: str) -> None:
+        self.movie.stop()
         self.movie.setFileName(path)
         self.movie.start()
+        self.set_scale(1)
     
     
     def set_scale(self, scale: float) -> None:
