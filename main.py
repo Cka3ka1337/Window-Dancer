@@ -28,10 +28,14 @@ def main() -> None:
     update_style_timer.start(100)
     
     overlay = MainOverlay()
-    window = MainWindow(overlay.set_movie, overlay.set_scale)
+    window = MainWindow()
     
-    # overlay.set_movie('resources/example.gif')
-    # overlay.set_scale(0.5)
+    overlay.set_movie('./resources/example_0.gif')
+    overlay.set_scale(0.5)
+    
+    window.set_movie = overlay.set_movie
+    window.set_scale = overlay.set_scale
+    window.init_ui() 
     
     overlay.show()
     window.show()
