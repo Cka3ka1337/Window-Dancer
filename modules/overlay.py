@@ -7,27 +7,44 @@ from PySide6.QtWidgets import (
     QLabel, QWidget
 )
 from PySide6.QtCore import (
-    Qt, QSize
+    Qt, QSize, QTimer
 )
 from PySide6.QtGui import (
     QMovie, QPainter, QPaintEvent, QCloseEvent
 )
 
+from scripts.targets import get_target_window
+
 
 class MainOverlay(QMainWindow):
+    prev_rect = (0, 0, 0, 0)
+    
     def __init__(self):
         super().__init__()
+        self._init_window()
+        self._init_ui()
+        self._init_timers()
+    
+    
+    def _init_timers(self) -> None:
+        self.update_window_pos_timer = QTimer()
+        self.update_window_pos_timer.timeout.connect(self._update_window_pos)
+        self.update_window_pos_timer.start(1)
+    
+    
+    def _init_window(self) -> None:
         self.setWindowTitle('MainOverlay')
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-        
+    
+    
+    def _init_ui(self) -> None:
         central_widget = QWidget()
         layout = QVBoxLayout(central_widget)
         self.movie = QMovie()
         self.movie.frameChanged.connect(self.update)
         self.label = QLabel() # Container for movie :/
         
-        # layout.addWidget(QLabel('This is MainOverlay'))
         layout.addWidget(self.label)
 
         layout.setContentsMargins(0, 0, 0, 0)
@@ -36,8 +53,35 @@ class MainOverlay(QMainWindow):
         central_widget.setLayout(layout)
     
     
-    def update_window_pos(self) -> None:
-        pass
+    def _update_window_pos(self) -> None:
+        rect, type, wname, hwnd = get_target_window()
+        x, y, w, h = rect
+        overlay = self.size()
+        
+        if type == 'window' or type == 'cursor':
+        
+            if rect != self.prev_rect:
+            
+                self.move(
+                    int(x + w / 2 - overlay.width() / 2),
+                    int(y - overlay.height())
+                )
+                
+                self.prev_rect = rect
+        
+        elif type == 'desktop':
+            
+            if rect != self.prev_rect:
+                
+                self.move(
+                    int(x + w / 2 - overlay.width() / 2),
+                    int(y + h - overlay.height())
+                )
+                
+                self.prev_rect = rect
+        
+        # print(rect, type)
+        
     
     
     def set_movie(self, path: str) -> None:
