@@ -23,6 +23,7 @@ class MainGroup(QGroupBox):
         slider_layout.setContentsMargins(0, 0, 0, 0)
         self.scale_slider = ScaleSlider(5, 100, 50, 100)
         self.scale_slider.set_scale = self.set_scale
+        self.scale_slider.update_scale()
         slider_layout.addWidget(self.scale_slider)
         
         vertical.addWidget(self.choice_gif_btn)
