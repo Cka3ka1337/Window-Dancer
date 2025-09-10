@@ -24,9 +24,10 @@ class TitleBarButton(QPushButton):
 
         
 class ChoiceGifButton(QPushButton):
-    def __init__(self, text: str, set_movie):
+    set_movie = None
+    
+    def __init__(self, text: str):
         super().__init__(text)
-        self.set_movie = set_movie
         self.clicked.connect(self.open_file_dialog)
         
     
