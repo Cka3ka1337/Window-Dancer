@@ -8,7 +8,6 @@ from PySide6.QtCore import (
 from PySide6.QtGui import (
     QMovie, QPainter, QPaintEvent, QCloseEvent
 )
-
 from scripts.targets import get_target_window
 from scripts import calculate
 
@@ -30,7 +29,7 @@ class MainOverlay(QMainWindow):
     def _init_timers(self) -> None:
         self.update_window_pos_timer = QTimer()
         self.update_window_pos_timer.timeout.connect(self._update_window_pos)
-        self.update_window_pos_timer.start(1)
+        self.update_window_pos_timer.start(10)
     
     
     def _init_window(self) -> None:
@@ -84,9 +83,8 @@ class MainOverlay(QMainWindow):
                 self.prev_rect = rect
         
     
-    def set_movie(self, path: str) -> None:
-        print(path)
-        if path == self.path:
+    def set_movie(self, path: str, reload: bool=False) -> None:
+        if path == self.path and not reload:
             return 
         
         self.path = path
@@ -100,8 +98,9 @@ class MainOverlay(QMainWindow):
         
         self.movie.stop()
         self.movie.setFileName(path)
+        self.movie.setCacheMode(QMovie.CacheAll)
         self.movie.start()
-        
+            
         self.__set_scale()
         
     
@@ -111,6 +110,7 @@ class MainOverlay(QMainWindow):
             int(self.gif_size.height() * self.scale)
         )
         
+        self.prev_rect = (0, 0, 0, 0)
         self.movie.setScaledSize(size)
         self.setFixedSize(size)
     
@@ -119,7 +119,7 @@ class MainOverlay(QMainWindow):
         self.scale = scale
         
         if self.path:
-            self.set_movie(self.path)
+            self.set_movie(self.path, True)
     
     
     def paintEvent(self, event: QPaintEvent) -> None:

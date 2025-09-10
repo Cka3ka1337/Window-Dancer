@@ -5,7 +5,7 @@ MainOverlay {
 TitleBar QLabel {
     font-family: 'Cascadia code';
     color: #FFFFFF;
-    font-size: 11px;
+    font-size: 12px;
     padding: 2px 2px 2px 2px;
     font-weight: bold;
     border: 1px;
@@ -18,14 +18,27 @@ MainGroup{
     border-radius: 5px;
     margin-top: 5px;
 }
+MainGroup QGroupBox {
+    padding: 10px 2px 0px 2px;
+    font-family: 'Cascadia code';
+    color: #FFFFFF;
+    font-size: 11px;
+    background-color: none;
+    border-radius: 5px;
+    border: 1px solid #4b474747;
+}
+MainGroup QGroupBox::title {
+    subcontrol-position: top;
+    /* margin-top: -5px; */
+}
 
 ChoiceGifButton {
     font-family: 'Cascadia code';
     color: #FFFFFF;
-    font-size: 10px;
+    font-size: 12px;
     background-color: #4b474747;
     border-radius: 3px;
-    padding: 5px;
+    padding: 7px;
 }
 ChoiceGifButton:hover {
     background-color: #634e4e4e;
@@ -33,5 +46,22 @@ ChoiceGifButton:hover {
 
 ChoiceGifButton:pressed {
     background-color: #4b474747;
-    font-size: 9px;
+    font-size: 11px;
 }
+
+ScaleSlider::groove:horizontal {
+    height: 10px;
+    background: #4b474747;
+    border-radius: 5px;
+}
+ScaleSlider::sub-page:horizontal {
+    height: 4px;
+    background: #634e4e4e;
+    border-radius: 5px;
+}
+ScaleSlider::handle:horizontal {
+    background: #ff707070;
+    width: 15px;
+    border-radius: 5px;
+}
+
