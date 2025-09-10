@@ -63,7 +63,7 @@ class MainWindow(QMainWindow):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setWindowOpacity(0)
-        self.setFixedSize(200, 250)
+        self.setFixedSize(300, 250)
     
     
     def __opening_timer(self) -> None:
