@@ -19,7 +19,7 @@ def update_style(app) -> None:
         app.setStyleSheet(style)
 
 
-def main():
+def main() -> None:
     app = QApplication(sys.argv)
     
     update_style(app)
@@ -29,6 +29,9 @@ def main():
     
     overlay = MainOverlay()
     window = MainWindow()
+    
+    window.set_movie = overlay.set_movie
+    window.set_scale = overlay.set_scale
     
     overlay.set_movie('resources/example.gif')
     overlay.set_scale(0.5)
