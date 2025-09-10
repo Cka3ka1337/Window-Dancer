@@ -30,7 +30,7 @@ def main() -> None:
     overlay = MainOverlay()
     window = MainWindow()
     
-    overlay.set_movie('./resources/example_0.gif')
+    # overlay.set_movie('./resources/example_0.gif')
     overlay.set_scale(0.5)
     
     window.set_movie = overlay.set_movie

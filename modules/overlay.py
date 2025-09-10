@@ -18,6 +18,9 @@ from scripts.targets import get_target_window
 
 class MainOverlay(QMainWindow):
     prev_rect = (0, 0, 0, 0)
+    path = ''
+    scale = 1
+    gif_size = None
     
     def __init__(self):
         super().__init__()
@@ -80,27 +83,43 @@ class MainOverlay(QMainWindow):
                 
                 self.prev_rect = rect
         
-        # print(rect, type)
-        
-    
     
     def set_movie(self, path: str) -> None:
+        print(path)
+        if path == self.path:
+            return 
+        
+        self.path = path
+        temp_movie = QMovie(path)
+        temp_movie.jumpToNextFrame()
+        
+        self.gif_size = temp_movie.frameRect()
+        
+        temp_movie.stop()
+        temp_movie.deleteLater()
+        
         self.movie.stop()
         self.movie.setFileName(path)
         self.movie.start()
-        self.set_scale(1)
-    
-    
-    def set_scale(self, scale: float) -> None:
-        frame_rect = self.movie.frameRect()
         
+        self.__set_scale()
+        
+    
+    def __set_scale(self) -> None:
         size = QSize(
-            int(frame_rect.width() * scale), 
-            int(frame_rect.height() * scale)
+            int(self.gif_size.width() * self.scale), 
+            int(self.gif_size.height() * self.scale)
         )
         
         self.movie.setScaledSize(size)
         self.setFixedSize(size)
+    
+    
+    def set_scale(self, scale: float) -> None:
+        self.scale = scale
+        
+        if self.path:
+            self.set_movie(self.path)
     
     
     def paintEvent(self, event: QPaintEvent) -> None:
