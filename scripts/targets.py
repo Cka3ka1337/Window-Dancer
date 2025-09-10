@@ -2,7 +2,7 @@ import win32api
 import win32gui
 
 
-def get_target_window() -> tuple[tuple, str, str, int]:
+def get_target_window(desktop: bool=False) -> tuple[tuple, str, str, int]:
     '''
     Returns the active window or
     monitor where the cursor is located.
@@ -14,7 +14,7 @@ def get_target_window() -> tuple[tuple, str, str, int]:
     wname = win32gui.GetWindowText(hWnd)
     cursor_pos = win32api.GetCursorPos()
     
-    if not hWnd:
+    if not hWnd or desktop:
         monitor_info = win32api.GetMonitorInfo(
             win32api.MonitorFromPoint(cursor_pos)
         )
@@ -28,6 +28,7 @@ def get_target_window() -> tuple[tuple, str, str, int]:
     elif win32gui.GetWindowText(hWnd):
         x1, y1, x2, y2 = win32gui.GetWindowRect(hWnd)
         return (x1, y1, x2 - x1, y2 - y1), 'window', wname, hWnd
+    
     else:
         rect = win32gui.GetWindowRect(hWnd)
         window_center_x = (rect[0] + rect[2]) // 2

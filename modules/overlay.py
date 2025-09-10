@@ -1,7 +1,3 @@
-import win32api
-import win32gui
-import win32con
-
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout,
     QLabel, QWidget
@@ -14,6 +10,7 @@ from PySide6.QtGui import (
 )
 
 from scripts.targets import get_target_window
+from scripts import calculate
 
 
 class MainOverlay(QMainWindow):
@@ -21,6 +18,7 @@ class MainOverlay(QMainWindow):
     path = ''
     scale = 1
     gif_size = None
+    prev_valid_pos = (0, 0)
     
     def __init__(self):
         super().__init__()
@@ -64,11 +62,15 @@ class MainOverlay(QMainWindow):
         if type == 'window' or type == 'cursor':
         
             if rect != self.prev_rect:
-            
-                self.move(
-                    int(x + w / 2 - overlay.width() / 2),
-                    int(y - overlay.height())
-                )
+                
+                pos = calculate.window_cursor(x, y, w, h, overlay)
+                if pos[1] <= 0:
+                    rect, type, wname, hwnd = get_target_window(True)
+                    x, y, w, h = rect
+                    
+                    pos = calculate.desktop(x, y, w, h, overlay)
+                
+                self.move(*pos)
                 
                 self.prev_rect = rect
         
@@ -76,10 +78,8 @@ class MainOverlay(QMainWindow):
             
             if rect != self.prev_rect:
                 
-                self.move(
-                    int(x + w / 2 - overlay.width() / 2),
-                    int(y + h - overlay.height())
-                )
+                pos = calculate.desktop(x, y, w, h, overlay)
+                self.move(*pos)
                 
                 self.prev_rect = rect
         
