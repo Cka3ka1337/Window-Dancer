@@ -17,15 +17,17 @@ from .components.main_group import MainGroup
 
 
 class MainWindow(QMainWindow):
+    set_movie = None
+    set_scale = None
     _is_dragging = False
     _drag_position = None
     _opacity = 0
     
-    def __init__(self, set_movie, set_scale):
+    def __init__(self):
         super().__init__()
-        self.set_movie = set_movie
-        self.set_scale = set_scale
         
+        
+    def init_ui(self) -> None:
         self._init_window()
         self._init_widgets()
         self._init_timers()
@@ -46,7 +48,10 @@ class MainWindow(QMainWindow):
         title_bar.minimized = self.showMinimized
         title_bar.init_ui()
         
-        main_group = MainGroup(self.set_movie, self.set_scale)
+        main_group = MainGroup()
+        main_group.set_movie = self.set_movie
+        main_group.set_scale = self.set_scale
+        main_group.init_ui()
         
         self.setCentralWidget(central_widget)
         layout.addWidget(title_bar)
