@@ -6,20 +6,9 @@ from PySide6.QtCore import (
     Signal
 )
 
-
-class ButtonMin(QPushButton):
-    def __init__(self):
-        super().__init__('')
-
-
-class ButtonClose(QPushButton):
-    def __init__(self):
-        super().__init__('')
-
-
-class TitleLabel(QLabel):
-    def __init__(self, *args):
-        super().__init__(*args)
+from .buttons import (
+    TitleBarButton
+)
 
 
 class TitleBar(QWidget):
@@ -27,18 +16,24 @@ class TitleBar(QWidget):
     minimized = Signal()
     maximized = Signal()
     
+    
     def __init__(self, title: str):
         super().__init__()
-        
-        self._setup_ui(title)
+        self.title = title
+    
+    
+    def init_ui(self):
+        self._setup_ui(self.title)
         self._setup_signals()
     
     
     def _setup_ui(self, title) -> None:
         layout = QHBoxLayout(self)
-        self.title_label = TitleLabel(title)
-        self.min_btn = ButtonMin()
-        self.close_btn = ButtonClose()
+        self.setFixedHeight(14)
+        self.title_label = QLabel(title)
+        
+        self.min_btn = TitleBarButton('#ffbd44', '#f0ad4e')
+        self.close_btn = TitleBarButton('#ed6a5e', '#da5448')
         
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(5)
@@ -50,8 +45,5 @@ class TitleBar(QWidget):
     
     
     def _setup_signals(self):
-        if hasattr(self, 'close_btn'):
-            self.close_btn.clicked.connect(self.closed.emit)
-            
-        if hasattr(self, 'min_btn'):
-            self.min_btn.clicked.connect(self.minimized.emit)
+        self.close_btn.clicked.connect(self.closed)
+        self.min_btn.clicked.connect(self.minimized)
