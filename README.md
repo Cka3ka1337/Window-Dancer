@@ -33,7 +33,6 @@
 * Simple interface
 * Transparency support
 * Performance
-* Adaptive 
 * Adaptation positioning overlay
 
 
