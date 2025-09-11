@@ -16,16 +16,9 @@ def update_style(app) -> None:
         app.setStyleSheet(style)
 
 
-# def load_startup_animation(overlay: MainOverlay, path: str) -> None:
-#     if not os.path.exists(path):
-#         return
-    
-#     overlay.set_movie(path)
-
-
 def main() -> None:
     config = ConfigSystem()
-    config._init()
+    print(config.config)
     
     app = QApplication(sys.argv)
     
@@ -36,10 +29,7 @@ def main() -> None:
     
     overlay = MainOverlay()
     window = MainWindow()
-    
-    # startup_path = config.get('startup.path')
-    # if startup_path: load_startup_animation(overlay, startup_path)
-    
+
     overlay.show()
     window.show()
     
