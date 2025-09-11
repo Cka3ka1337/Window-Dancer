@@ -8,8 +8,10 @@ from PySide6.QtCore import (
 from PySide6.QtGui import (
     QMovie, QPainter, QPaintEvent, QCloseEvent
 )
-from scripts.targets import get_target_window
 from scripts import calculate
+from scripts.targets import get_target_window
+from scripts.config_system import ConfigSystem
+
 
 
 class MainOverlay(QMainWindow):
@@ -18,6 +20,7 @@ class MainOverlay(QMainWindow):
     scale = 1
     gif_size = None
     prev_valid_pos = (0, 0)
+    config = ConfigSystem()
     
     def __init__(self):
         super().__init__()
@@ -29,7 +32,7 @@ class MainOverlay(QMainWindow):
     def _init_timers(self) -> None:
         self.update_window_pos_timer = QTimer()
         self.update_window_pos_timer.timeout.connect(self._update_window_pos)
-        self.update_window_pos_timer.start(10)
+        self.update_window_pos_timer.start(self.config.get('overlay.update_pos_delay_ms'))
     
     
     def _init_window(self) -> None:
