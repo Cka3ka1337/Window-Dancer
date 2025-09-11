@@ -12,8 +12,10 @@ from PySide6.QtGui import (
     QBrush, QColor, QPen, QLinearGradient,
     QPaintEvent
 )
+
 from .components.titlebar import TitleBar
 from .components.main_group import MainGroup
+from scripts.config_system import ConfigSystem
 
 
 class MainWindow(QMainWindow):
@@ -22,6 +24,7 @@ class MainWindow(QMainWindow):
     _is_dragging = False
     _drag_position = None
     _opacity = 0
+    config = ConfigSystem()
     
     def __init__(self):
         super().__init__()
@@ -63,7 +66,10 @@ class MainWindow(QMainWindow):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setWindowOpacity(0)
-        self.setFixedSize(300, 250)
+        self.setFixedSize(
+            self.config.get('window.width'),
+            self.config.get('window.height')
+        )
     
     
     def __opening_timer(self) -> None:
