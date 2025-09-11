@@ -47,18 +47,14 @@ class ConfigSystem:
                 
                 with open(self.config_path, 'rb') as file:
                     self.config.update(tomllib.load(file))
-                    print(self.config)
-                    print('Config Loaded')
                 
             except (tomllib.TOMLDecodeError, FileNotFoundError) as e:
                 self.config = self.get_default_config()
                 self.save_config()
-                print('Config ReCreated', e)
             
         else:
             self.config = self.get_default_config()
             self.save_config()
-            print('Config Created')
     
     
     def get_default_config(self):
@@ -68,7 +64,8 @@ class ConfigSystem:
                 'height': 300
             },
             'overlay': {
-                'update_pos_delay_ms': 10
+                'update_pos_delay_ms': 10,
+                'animated_movement': False
             },
             'startup': {
                 'path': '',
@@ -110,6 +107,5 @@ class ConfigSystem:
     def __new__(cls):
         if cls.__instance is None:
             cls.__instance = super(ConfigSystem, cls).__new__(cls)
-            
             
         return cls.__instance
