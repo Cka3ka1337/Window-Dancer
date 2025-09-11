@@ -26,7 +26,7 @@ def load_startup_animation(overlay: MainOverlay, path: str) -> None:
 
 def main() -> None:
     config = ConfigSystem()
-    config._init('1.0.0')
+    config._init()
     
     app = QApplication(sys.argv)
     

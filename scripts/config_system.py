@@ -20,9 +20,7 @@ class ConfigSystem:
     )
     
     
-    def _init(self, version: str) -> None:
-        self.version = version
-        
+    def _init(self) -> None:
         self.config_path = Path(self._config_path)
         self.config_dir = self.config_path.parent
         self.config_dir.mkdir(parents=True, exist_ok=True)
@@ -65,9 +63,6 @@ class ConfigSystem:
     
     def get_default_config(self):
         return {
-            'version': {
-                'v': f'{self.version}'
-            },
             'window': {
                 'width': 300,
                 'height': 300
