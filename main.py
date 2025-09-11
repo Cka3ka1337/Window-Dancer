@@ -1,12 +1,9 @@
 import os
 import sys
 
-from PySide6.QtWidgets import (
-    QApplication
-)
-from PySide6.QtCore import (
-    QTimer
-)
+from PySide6.QtCore import QTimer
+from PySide6.QtWidgets import QApplication
+
 from modules.ui import MainWindow
 from modules.overlay import MainOverlay
 from scripts.config_system import ConfigSystem
@@ -19,11 +16,11 @@ def update_style(app) -> None:
         app.setStyleSheet(style)
 
 
-def load_startup_animation(overlay: MainOverlay, path: str) -> None:
-    if not os.path.exists(path):
-        return
+# def load_startup_animation(overlay: MainOverlay, path: str) -> None:
+#     if not os.path.exists(path):
+#         return
     
-    overlay.set_movie(path)
+#     overlay.set_movie(path)
 
 
 def main() -> None:
@@ -40,14 +37,8 @@ def main() -> None:
     overlay = MainOverlay()
     window = MainWindow()
     
-    window.set_movie = overlay.set_movie
-    window.set_scale = overlay.set_scale
-    window.get_movie = overlay.get_movie
-    window.get_scale = overlay.get_scale
-    window.init_ui() 
-    
-    startup_path = config.get('startup.path')
-    if startup_path: load_startup_animation(overlay, startup_path)
+    # startup_path = config.get('startup.path')
+    # if startup_path: load_startup_animation(overlay, startup_path)
     
     overlay.show()
     window.show()
