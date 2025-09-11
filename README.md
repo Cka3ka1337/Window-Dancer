@@ -34,6 +34,7 @@
 * Transparency support
 * Performance
 * Adaptation positioning overlay
+* Config system
 
 
 ## Quick start
