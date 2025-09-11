@@ -4,7 +4,9 @@ import sys
 from PySide6.QtWidgets import (
     QApplication
 )
-
+from PySide6.QtCore import (
+    QTimer
+)
 from modules.ui import MainWindow
 from modules.overlay import MainOverlay
 from scripts.config_system import ConfigSystem
@@ -31,9 +33,9 @@ def main() -> None:
     app = QApplication(sys.argv)
     
     update_style(app)
-    # update_style_timer = QTimer()
-    # update_style_timer.timeout.connect(lambda: update_style(app))
-    # update_style_timer.start(100)
+    update_style_timer = QTimer()
+    update_style_timer.timeout.connect(lambda: update_style(app))
+    update_style_timer.start(100)
     
     overlay = MainOverlay()
     window = MainWindow()

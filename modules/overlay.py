@@ -10,10 +10,10 @@ from PySide6.QtCore import (
 from PySide6.QtGui import (
     QMovie, QPainter, QPaintEvent, QCloseEvent
 )
+
 from scripts import calculate
 from scripts.targets import get_target_window
 from scripts.config_system import ConfigSystem
-
 
 
 class MainOverlay(QMainWindow):
@@ -75,9 +75,6 @@ class MainOverlay(QMainWindow):
         x, y, w, h = rect
         overlay = self.size()
         
-        # if wname == 'MainOverlay':
-        #     return
-        
         if type == 'window' or type == 'cursor':
         
             if rect != self.prev_rect:
@@ -118,7 +115,6 @@ class MainOverlay(QMainWindow):
         
         self.movie.stop()
         self.movie.setFileName(path)
-        # self.movie.setCacheMode(QMovie.CacheAll)
         self.movie.start()
             
         self.__set_scale()
