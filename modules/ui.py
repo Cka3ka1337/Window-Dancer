@@ -1,28 +1,22 @@
-import os
-
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget,
     QVBoxLayout
 )
 from PySide6.QtCore import (
-    Qt, QTimer, QPointF
+    Qt, QTimer, QPointF, Slot
 )
 from PySide6.QtGui import (
     QMouseEvent, QKeyEvent, QPainter,
-    QBrush, QColor, QPen, QLinearGradient,
+    QBrush, QColor, QLinearGradient,
     QPaintEvent
 )
 
-from .components.titlebar import TitleBar
-from .components.main_group import MainGroup
+from modules.components.titlebar import TitleBar
+from modules.components.main_group import MainGroup
 from scripts.config_system import ConfigSystem
 
 
 class MainWindow(QMainWindow):
-    set_movie = None
-    set_scale = None
-    get_movie = None
-    get_scale = None
     _is_dragging = False
     _drag_position = None
     _opacity = 0
@@ -30,11 +24,8 @@ class MainWindow(QMainWindow):
     
     def __init__(self):
         super().__init__()
-        
-        
-    def init_ui(self) -> None:
         self._init_window()
-        self._init_widgets()
+        self._init_ui()
         self._init_timers()
         
     
@@ -44,21 +35,12 @@ class MainWindow(QMainWindow):
         self.opening_timer.start(5)
     
     
-    def _init_widgets(self) -> None:
+    def _init_ui(self) -> None:
         central_widget = QWidget()
         layout = QVBoxLayout(central_widget)
         
-        title_bar = TitleBar('Window Dancer')
-        title_bar.closed = self.close
-        title_bar.minimized = self.showMinimized
-        title_bar.init_ui()
-        
+        title_bar = TitleBar('Window Dancer', self.close, self.showMinimized)
         main_group = MainGroup()
-        main_group.set_movie = self.set_movie
-        main_group.set_scale = self.set_scale
-        main_group.get_movie = self.get_movie
-        main_group.get_scale = self.get_scale
-        main_group.init_ui()
         
         self.setCentralWidget(central_widget)
         layout.addWidget(title_bar)
@@ -76,6 +58,7 @@ class MainWindow(QMainWindow):
         )
     
     
+    @Slot()
     def __opening_timer(self) -> None:
         target_opacity = 1
         step_scale = 0.1
@@ -89,6 +72,7 @@ class MainWindow(QMainWindow):
         self.setWindowOpacity(
             self._opacity
         )
+      
       
     def paintEvent(self, event: QPaintEvent) -> None:
         painter = QPainter(self)

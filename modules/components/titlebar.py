@@ -1,33 +1,21 @@
 from PySide6.QtWidgets import (
-    QHBoxLayout, QWidget,
-    QLabel, QPushButton
-)
-from PySide6.QtCore import (
-    Signal
+    QHBoxLayout, QWidget, QLabel
 )
 
-from .buttons import (
-    TitleBarButton
-)
+from modules.components.buttons import TitleBarButton
 
 
 class TitleBar(QWidget):
-    closed = Signal()
-    minimized = Signal()
-    maximized = Signal()
-    
-    
-    def __init__(self, title: str):
+    def __init__(self, title: str, close, minimized):
         super().__init__()
-        self.title = title
+        self.closed = close
+        self.minimized = minimized
+        
+        self._init_ui(title)
+        self._init_signals()
     
     
-    def init_ui(self):
-        self._setup_ui(self.title)
-        self._setup_signals()
-    
-    
-    def _setup_ui(self, title) -> None:
+    def _init_ui(self, title: str) -> None:
         layout = QHBoxLayout(self)
         self.setFixedHeight(14)
         self.title_label = QLabel(title)
@@ -44,6 +32,6 @@ class TitleBar(QWidget):
         layout.addWidget(self.close_btn)
     
     
-    def _setup_signals(self):
+    def _init_signals(self) -> None:
         self.close_btn.clicked.connect(self.closed)
         self.min_btn.clicked.connect(self.minimized)

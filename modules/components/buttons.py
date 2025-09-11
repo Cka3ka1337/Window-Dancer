@@ -1,14 +1,12 @@
-from PySide6.QtWidgets import (
-    QPushButton, QFileDialog
-)
+from PySide6.QtWidgets import QPushButton, QFileDialog
 
+from scripts.shared import SharedData
 from scripts.config_system import ConfigSystem
 
 
 class SetStartupButtom(QPushButton):
-    get_movie = None
-    get_scale = None
     config = ConfigSystem()
+    shared = SharedData()
     
     def __init__(self, title: str):
         super().__init__(title)
@@ -16,16 +14,17 @@ class SetStartupButtom(QPushButton):
         
     
     def set_startup(self) -> None:
-        if self.get_movie is None or self.get_scale is None:
+        get_movie = self.shared.get('movie.get')
+        get_scale = self.shared.get('scale.get')
+        
+        if set is None:
             return
         
-        self.config.set('startup.path', self.get_movie())
-        self.config.set('startup.scale', self.get_scale())
+        self.config.set('startup.path', get_movie())
+        self.config.set('startup.scale', get_scale())
 
 
 class ClearStartupButtom(QPushButton):
-    get_movie = None
-    get_scale = None
     config = ConfigSystem()
     
     def __init__(self, title: str):
@@ -34,9 +33,6 @@ class ClearStartupButtom(QPushButton):
         
     
     def set_startup(self) -> None:
-        if self.get_movie is None or self.get_scale is None:
-            return
-        
         self.config.set('startup.path', '')
         self.config.set('startup.scale', 0.5)
 
@@ -62,7 +58,7 @@ class TitleBarButton(QPushButton):
 
         
 class ChoiceGifButton(QPushButton):
-    set_movie = None
+    shared = SharedData()
     
     def __init__(self, text: str):
         super().__init__(text)
@@ -70,15 +66,18 @@ class ChoiceGifButton(QPushButton):
         
     
     def open_file_dialog(self) -> None:
-        path, filter = QFileDialog.getOpenFileName(
+        set_movie = self.shared.get('movie.set')
+        if set_movie is None:
+            return
+        
+        path, _ = QFileDialog.getOpenFileName(
             parent=None,
             caption='Select content',
             dir='.',
-            filter="Anim Files (*.gif)"
+            filter="Anim Files (*.gif);;All Files (*)"
         )
         
         if not path:
             return
         
-        if self.set_movie is not None:
-            self.set_movie(path)
+        set_movie(path)

@@ -5,13 +5,14 @@ from PySide6.QtWidgets import (
     QLabel, QWidget
 )
 from PySide6.QtCore import (
-    Qt, QSize, QTimer
+    Qt, QSize, QTimer, Slot
 )
 from PySide6.QtGui import (
     QMovie, QPainter, QPaintEvent, QCloseEvent
 )
 
 from scripts import calculate
+from scripts.shared import SharedData
 from scripts.targets import get_target_window
 from scripts.config_system import ConfigSystem
 
@@ -23,12 +24,21 @@ class MainOverlay(QMainWindow):
     gif_size = None
     prev_valid_pos = (0, 0)
     config = ConfigSystem()
+    shared = SharedData()
     
     def __init__(self):
         super().__init__()
         self._init_window()
         self._init_ui()
         self._init_timers()
+        self._init_hooks()
+    
+    
+    def _init_hooks(self) -> None:
+        self.shared.set('movie.get', self.get_movie)
+        self.shared.set('movie.set', self.set_movie)
+        self.shared.set('scale.get', self.get_scale)
+        self.shared.set('scale.set', self.set_scale)
     
     
     def _init_timers(self) -> None:
@@ -70,6 +80,7 @@ class MainOverlay(QMainWindow):
         central_widget.setLayout(layout)
     
     
+    @Slot()
     def _update_window_pos(self) -> None:
         rect, type, wname, hwnd = get_target_window()
         x, y, w, h = rect
