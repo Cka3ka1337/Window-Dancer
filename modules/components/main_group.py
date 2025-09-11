@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import (
     QGroupBox, QVBoxLayout, QHBoxLayout
 )
+
 from .buttons import ChoiceGifButton, SetStartupButtom, ClearStartupButtom
 from .slider import ScaleSlider
 

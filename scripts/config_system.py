@@ -1,6 +1,6 @@
 import os
+import tomllib
 
-import tomli
 import tomli_w
 import win32api
 
@@ -35,6 +35,7 @@ class ConfigSystem:
             
             with open(self.config_path, 'wb') as f:
                 tomli_w.dump(self.config, f)
+                pass
                 
             return True
         
@@ -44,14 +45,14 @@ class ConfigSystem:
     
     def load_config(self) -> None:
         if self.config_path.exists():
-            
             try:
                 
                 with open(self.config_path, 'rb') as file:
-                    self.config.update(tomli.load(file))
+                    self.config.update(tomllib.load(file))
+                    print(self.config)
                     print('Config Loaded')
                 
-            except (tomli.TOMLDecodeError, FileNotFoundError) as e:
+            except (tomllib.TOMLDecodeError, FileNotFoundError) as e:
                 self.config = self.get_default_config()
                 self.save_config()
                 print('Config ReCreated', e)
