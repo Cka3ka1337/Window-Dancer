@@ -26,7 +26,7 @@ class MainGroup(QGroupBox):
         self.config_clear_btn = ClearStartupButtom('Clear Startup')
         self.choice_gif_btn = ChoiceGifButton('Choice animation')
         self.animated_movement = CheckBox(
-            'checkbox.animated_movement',
+            'animated_movement',
             'Animated Overlay Movement'
         )
         
