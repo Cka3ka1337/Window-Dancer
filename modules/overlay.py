@@ -1,3 +1,5 @@
+import ctypes
+
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout,
     QLabel, QWidget
@@ -37,9 +39,19 @@ class MainOverlay(QMainWindow):
     
     def _init_window(self) -> None:
         self.setWindowTitle('MainOverlay')
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool)
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint | Qt.Tool )
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-    
+        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        
+        hwnd = int(self.winId())
+        GWL_EXSTYLE = -20
+        WS_EX_LAYERED = 0x00080000
+        WS_EX_TRANSPARENT = 0x00000020
+        
+        current_style = ctypes.windll.user32.GetWindowLongW(hwnd, GWL_EXSTYLE)
+        new_style = current_style | WS_EX_LAYERED | WS_EX_TRANSPARENT
+        ctypes.windll.user32.SetWindowLongW(hwnd, GWL_EXSTYLE, new_style)
+        
     
     def _init_ui(self) -> None:
         central_widget = QWidget()
@@ -62,6 +74,9 @@ class MainOverlay(QMainWindow):
         rect, type, wname, hwnd = get_target_window()
         x, y, w, h = rect
         overlay = self.size()
+        
+        # if wname == 'MainOverlay':
+        #     return
         
         if type == 'window' or type == 'cursor':
         
@@ -144,3 +159,19 @@ class MainOverlay(QMainWindow):
     def closeEvent(self, event: QCloseEvent) -> None:
         QApplication.instance().quit()
         super().closeEvent(event)
+    
+    
+    def mousePressEvent(self, event):
+        event.ignore()
+        
+    def mouseReleaseEvent(self, event):
+        event.ignore()
+        
+    def mouseDoubleClickEvent(self, event):
+        event.ignore()
+        
+    def mouseMoveEvent(self, event):
+        event.ignore()
+        
+    def wheelEvent(self, event):
+        event.ignore()
