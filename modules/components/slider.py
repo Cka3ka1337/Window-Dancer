@@ -4,6 +4,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import (
     Qt
 )
+from scripts.config_system import ConfigSystem
 
 
 class ScaleSlider(QSlider):
@@ -21,13 +22,17 @@ class ScaleSlider(QSlider):
         self.default = default
         self.divider = divider
         
-        self.setMinimum(min)
-        self.setMaximum(max)
-        self.setValue(default)
+        scale = ConfigSystem().get('startup.scale')
+        if scale:
+            self.default = self.min + (self.max - self.min) * scale
+        
+        self.setMinimum(self.min)
+        self.setMaximum(self.max)
+        self.setValue(self.default)
+        
         
         self.valueChanged.connect(self.update_scale)
         
     
     def update_scale(self) -> None:
         self.set_scale(self.value() / self.divider)
-    
