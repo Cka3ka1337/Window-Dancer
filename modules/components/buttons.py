@@ -22,6 +22,7 @@ class SetStartupButtom(QPushButton):
         
         self.config.set('startup.path', get_movie())
         self.config.set('startup.scale', get_scale())
+        self.config.set('startup.animated_movement', self.shared.get('animated_movement'))
 
 
 class ClearStartupButtom(QPushButton):
@@ -35,6 +36,7 @@ class ClearStartupButtom(QPushButton):
     def set_startup(self) -> None:
         self.config.set('startup.path', '')
         self.config.set('startup.scale', 0.5)
+        self.config.set('startup.animated_movement', False)
 
 
 class TitleBarButton(QPushButton):

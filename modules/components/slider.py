@@ -22,10 +22,9 @@ class ScaleSlider(QSlider):
         
         self.setMinimum(self.min)
         self.setMaximum(self.max)
-        self.setValue(self.default)
+        self.setValue(self.min + (self.max - self.min) * self.shared.get('scale.get')())
         
         self.valueChanged.connect(self.update_scale)
-        self.update_scale()
         
     
     @Slot()

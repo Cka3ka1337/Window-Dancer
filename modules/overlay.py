@@ -8,7 +8,7 @@ from PySide6.QtCore import (
     Qt, QSize, QTimer, Slot
 )
 from PySide6.QtGui import (
-    QMovie, QPainter, QPaintEvent, QCloseEvent
+    QMovie, QPainter, QPaintEvent
 )
 
 from scripts import calculate
@@ -18,13 +18,16 @@ from scripts.config_system import ConfigSystem
 
 
 class MainOverlay(QMainWindow):
-    prev_rect = (0, 0, 0, 0)
-    path = ''
-    scale = 1
+    shared = SharedData()
+    config = ConfigSystem()
+    
+    path = '' if config.get('startup.path') is None else config.get('startup.path')
+    scale = 1 if config.get('startup.scale') is None else config.get('startup.scale')
     gif_size = None
     prev_valid_pos = (0, 0)
-    config = ConfigSystem()
-    shared = SharedData()
+    prev_rect = (0, 0, 0, 0)
+    
+    animation_move_ended = False
     
     def __init__(self):
         super().__init__()
@@ -32,6 +35,9 @@ class MainOverlay(QMainWindow):
         self._init_ui()
         self._init_timers()
         self._init_hooks()
+        
+        self.set_scale(self.scale)
+        self.set_movie(self.path)
     
     
     def _init_hooks(self) -> None:
@@ -85,30 +91,54 @@ class MainOverlay(QMainWindow):
         rect, type, wname, hwnd = get_target_window()
         x, y, w, h = rect
         overlay = self.size()
+        target = None
+        animated_movement = bool(self.shared.get('animated_movement'))
         
         if type == 'window' or type == 'cursor':
         
-            if rect != self.prev_rect:
+            if rect != self.prev_rect or animated_movement or not self.animation_move_ended:
                 
-                pos = calculate.window_cursor(x, y, w, h, overlay)
-                if pos[1] <= 0:
+                target = calculate.window_cursor(x, y, w, h, overlay)
+                if target[1] <= 0:
                     rect, type, wname, hwnd = get_target_window(True)
                     x, y, w, h = rect
                     
-                    pos = calculate.desktop(x, y, w, h, overlay)
-                
-                self.move(*pos)
-                
-                self.prev_rect = rect
+                    target = calculate.desktop(x, y, w, h, overlay)
         
         elif type == 'desktop':
             
-            if rect != self.prev_rect:
+            if rect != self.prev_rect or animated_movement or not self.animation_move_ended:
                 
-                pos = calculate.desktop(x, y, w, h, overlay)
-                self.move(*pos)
-                
-                self.prev_rect = rect
+                target = calculate.desktop(x, y, w, h, overlay)
+        
+        
+        self.prev_rect = rect
+        if target is None:
+            return
+
+        
+        if animated_movement:
+            pos = self.pos()
+            scale = 0.1
+            
+            move_x = (target[0] - pos.x())
+            move_y = (target[1] - pos.y())
+            
+            move_x_scaled = int(move_x * scale)
+            move_y_scaled = int(move_y * scale)
+            
+            target_move_x = move_x if not move_x_scaled else move_x_scaled
+            target_move_y = move_y if not move_y_scaled else move_y_scaled
+            
+            self.animation_move_ended = not move_x_scaled and not move_y_scaled
+            
+            self.move(pos.x() + target_move_x, pos.y() + target_move_y)
+            
+        else:
+            if target == (0, 0):
+                self.animation_move_ended = True
+            
+            self.move(*target)
         
     
     def set_movie(self, path: str, reload: bool=False) -> None:
@@ -161,24 +191,3 @@ class MainOverlay(QMainWindow):
         painter = QPainter(self)
         if self.movie.isValid():
             painter.drawPixmap(0, 0, self.movie.currentPixmap())
-    
-    
-    def closeEvent(self, event: QCloseEvent) -> None:
-        QApplication.instance().quit()
-        super().closeEvent(event)
-    
-    
-    def mousePressEvent(self, event):
-        event.ignore()
-        
-    def mouseReleaseEvent(self, event):
-        event.ignore()
-        
-    def mouseDoubleClickEvent(self, event):
-        event.ignore()
-        
-    def mouseMoveEvent(self, event):
-        event.ignore()
-        
-    def wheelEvent(self, event):
-        event.ignore()
