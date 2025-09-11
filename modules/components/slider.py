@@ -30,7 +30,6 @@ class ScaleSlider(QSlider):
         self.setMaximum(self.max)
         self.setValue(self.default)
         
-        
         self.valueChanged.connect(self.update_scale)
         
     

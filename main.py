@@ -46,10 +46,7 @@ def main() -> None:
     window.init_ui() 
     
     startup_path = config.get('startup.path')
-    startup_scale = config.get('startup.scale')
-    
     if startup_path: load_startup_animation(overlay, startup_path)
-    if startup_scale: overlay.set_scale(startup_scale)
     
     overlay.show()
     window.show()
