@@ -20,7 +20,7 @@ class ConfigSystem:
     )
     
     
-    def _init(self) -> None:
+    def __init__(self) -> None:
         self.config_path = Path(self._config_path)
         self.config_dir = self.config_path.parent
         self.config_dir.mkdir(parents=True, exist_ok=True)
@@ -64,12 +64,12 @@ class ConfigSystem:
                 'height': 300
             },
             'overlay': {
-                'update_pos_delay_ms': 10,
-                'animated_movement': False
+                'update_pos_delay_ms': 10
             },
             'startup': {
                 'path': '',
-                'scale': 0.5
+                'scale': 0.5,
+                'animated_movement': False
             }
         }
     
