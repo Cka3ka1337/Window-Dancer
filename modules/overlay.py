@@ -46,6 +46,8 @@ class MainOverlay(QMainWindow):
         layout = QVBoxLayout(central_widget)
         self.movie = QMovie()
         self.movie.frameChanged.connect(self.update)
+        self.movie.setScaledSize(QSize(5, 5)) # Bug fix
+        
         self.label = QLabel() # Container for movie :/
         
         layout.addWidget(self.label)
@@ -101,7 +103,7 @@ class MainOverlay(QMainWindow):
         
         self.movie.stop()
         self.movie.setFileName(path)
-        self.movie.setCacheMode(QMovie.CacheAll)
+        # self.movie.setCacheMode(QMovie.CacheAll)
         self.movie.start()
             
         self.__set_scale()
@@ -123,6 +125,14 @@ class MainOverlay(QMainWindow):
         
         if self.path:
             self.set_movie(self.path, True)
+    
+    
+    def get_movie(self) -> str:
+        return self.path
+    
+    
+    def get_scale(self) -> float:
+        return self.scale
     
     
     def paintEvent(self, event: QPaintEvent) -> None:

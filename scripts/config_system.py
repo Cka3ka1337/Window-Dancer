@@ -21,7 +21,7 @@ class ConfigSystem:
     
     
     def _init(self, version: str) -> None:
-        self.versin = version
+        self.version = version
         
         self.config_path = Path(self._config_path)
         self.config_dir = self.config_path.parent
@@ -68,8 +68,8 @@ class ConfigSystem:
                 'v': f'{self.version}'
             },
             'window': {
-                'width': 1024,
-                'height': 768
+                'width': 300,
+                'height': 300
             },
             'overlay': {
                 'update_pos_delay_ms': 10

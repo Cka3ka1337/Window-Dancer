@@ -21,6 +21,8 @@ from scripts.config_system import ConfigSystem
 class MainWindow(QMainWindow):
     set_movie = None
     set_scale = None
+    get_movie = None
+    get_scale = None
     _is_dragging = False
     _drag_position = None
     _opacity = 0
@@ -54,6 +56,8 @@ class MainWindow(QMainWindow):
         main_group = MainGroup()
         main_group.set_movie = self.set_movie
         main_group.set_scale = self.set_scale
+        main_group.get_movie = self.get_movie
+        main_group.get_scale = self.get_scale
         main_group.init_ui()
         
         self.setCentralWidget(central_widget)

@@ -48,6 +48,41 @@ ChoiceGifButton:pressed {
     background-color: #4b474747;
     font-size: 11px;
 }
+ChoiceGifButton:focus { outline: none; }
+
+SetStartupButtom {
+    font-family: 'Cascadia code';
+    color: #FFFFFF;
+    font-size: 12px;
+    background-color: #4b474747;
+    border-radius: 3px;
+    padding: 7px;
+}
+SetStartupButtom:hover {
+    background-color: #634e4e4e;
+}
+SetStartupButtom:pressed {
+    background-color: #4b474747;
+    font-size: 11px;
+}
+SetStartupButtom:focus { outline: none; }
+
+ClearStartupButtom {
+    font-family: 'Cascadia code';
+    color: #FFFFFF;
+    font-size: 12px;
+    background-color: #4b474747;
+    border-radius: 3px;
+    padding: 7px;
+}
+ClearStartupButtom:hover {
+    background-color: #634e4e4e;
+}
+ClearStartupButtom:pressed {
+    background-color: #4b474747;
+    font-size: 11px;
+}
+ClearStartupButtom:focus { outline: none; }
 
 ScaleSlider::groove:horizontal {
     height: 10px;

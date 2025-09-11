@@ -43,6 +43,8 @@ def main() -> None:
     
     window.set_movie = overlay.set_movie
     window.set_scale = overlay.set_scale
+    window.get_movie = overlay.get_movie
+    window.get_scale = overlay.get_scale
     window.init_ui() 
     
     startup_path = config.get('startup.path')
