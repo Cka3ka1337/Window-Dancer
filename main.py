@@ -8,8 +8,9 @@ from PySide6.QtCore import (
     QTimer,
 )
 
-from modules.overlay import MainOverlay
 from modules.ui import MainWindow
+from modules.overlay import MainOverlay
+from scripts.config_system import ConfigSystem
         
     
 def update_style(app) -> None:
@@ -19,13 +20,23 @@ def update_style(app) -> None:
         app.setStyleSheet(style)
 
 
+def load_startup_animation(overlay: MainOverlay, path: str) -> None:
+    if not os.path.exists(path):
+        return
+    
+    overlay.set_movie(path)
+
+
 def main() -> None:
+    config = ConfigSystem()
+    config._init('1.0.0')
+    
     app = QApplication(sys.argv)
     
     update_style(app)
-    update_style_timer = QTimer()
-    update_style_timer.timeout.connect(lambda: update_style(app))
-    update_style_timer.start(100)
+    # update_style_timer = QTimer()
+    # update_style_timer.timeout.connect(lambda: update_style(app))
+    # update_style_timer.start(100)
     
     overlay = MainOverlay()
     window = MainWindow()
@@ -33,6 +44,12 @@ def main() -> None:
     window.set_movie = overlay.set_movie
     window.set_scale = overlay.set_scale
     window.init_ui() 
+    
+    startup_path = config.get('startup.path')
+    startup_scale = config.get('startup.scale')
+    
+    if startup_path: load_startup_animation(overlay, startup_path)
+    if startup_scale: overlay.set_scale(startup_scale)
     
     overlay.show()
     window.show()
