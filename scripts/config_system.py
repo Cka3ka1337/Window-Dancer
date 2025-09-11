@@ -9,26 +9,31 @@ from pathlib import Path
 
 class ConfigSystem:
     __instance = None
+    config = {}
     _config_path = os.path.join(
         win32api.GetSystemDirectory()[:2],
         'Users',
         os.getlogin(),
         'Documents',
-        'Window-Dancer'
+        'Window-Dancer',
+        'config.toml'
     )
-    _config_name = 'config.toml'
     
     
-    def _init(self) -> None:
+    def _init(self, version: str) -> None:
+        self.versin = version
+        
         self.config_path = Path(self._config_path)
         self.config_dir = self.config_path.parent
         self.config_dir.mkdir(parents=True, exist_ok=True)
+        
+        self.load_config()
     
 
     def save_config(self):
         try:
             
-            with open(self.config_path, "wb") as f:
+            with open(self.config_path, 'wb') as f:
                 tomli_w.dump(self.config, f)
                 
             return True
@@ -37,33 +42,41 @@ class ConfigSystem:
             return False
     
     
-    def load_config(self) -> any:
+    def load_config(self) -> None:
         if self.config_path.exists():
             
             try:
                 
-                with open(self.config_path, "rb") as file:
-                    return tomli.load(file)
+                with open(self.config_path, 'rb') as file:
+                    self.config.update(tomli.load(file))
+                    print('Config Loaded')
                 
             except (tomli.TOMLDecodeError, FileNotFoundError) as e:
-                return self.get_default_config()
+                self.config = self.get_default_config()
+                self.save_config()
+                print('Config ReCreated', e)
             
         else:
-            return self.get_default_config()
+            self.config = self.get_default_config()
+            self.save_config()
+            print('Config Created')
     
     
     def get_default_config(self):
         return {
-            "window": {
-                "width": 1024,
-                "height": 768
+            'version': {
+                'v': f'{self.version}'
             },
-            "overlay": {
-                "update_pos_delay_ms": 10
+            'window': {
+                'width': 1024,
+                'height': 768
             },
-            "startup": {
-                "load": False,
-                "path": ""
+            'overlay': {
+                'update_pos_delay_ms': 10
+            },
+            'startup': {
+                'path': '',
+                'scale': 0.5
             }
         }
     
