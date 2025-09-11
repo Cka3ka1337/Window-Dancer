@@ -24,7 +24,7 @@
 
 ## Preview
 <div align="center">
-  <img width="426" height="486" alt="image" src="https://github.com/user-attachments/assets/cfc2660c-2351-4402-9347-242cc27c7bb5" />
+  <img alt="image" src="https://github.com/Cka3ka1337/Window-Dancer/blob/main/preview.png" />
 </div>
 
 
