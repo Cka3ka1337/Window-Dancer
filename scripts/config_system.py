@@ -69,7 +69,8 @@ class ConfigSystem:
             'startup': {
                 'path': '',
                 'scale': 0.5,
-                'animated_movement': False
+                'animated_movement': False,
+                'smoothness': 0.125
             }
         }
     

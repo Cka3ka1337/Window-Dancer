@@ -22,6 +22,7 @@ class MainOverlay(QMainWindow):
     
     path = '' if config.get('startup.path') is None else config.get('startup.path')
     scale = 1 if config.get('startup.scale') is None else config.get('startup.scale')
+    smooth = 0.125 if config.get('startup.smooth') is None else config.get('startup.smooth')
     gif_size = None
     prev_valid_pos = (0, 0)
     prev_rect = (0, 0, 0, 0)
@@ -42,6 +43,8 @@ class MainOverlay(QMainWindow):
         self.shared.set('movie.set', self.set_movie)
         self.shared.set('scale.get', self.get_scale)
         self.shared.set('scale.set', self.set_scale)
+        self.shared.set('smooth.get', self.get_smooth)
+        self.shared.set('smooth.set', self.set_smooth)
     
     
     def _init_timers(self) -> None:
@@ -90,13 +93,12 @@ class MainOverlay(QMainWindow):
         
         if animated_movement:
             pos = self.pos()
-            scale = 0.1
             
             move_x = (target[0] - pos.x())
             move_y = (target[1] - pos.y())
             
-            move_x_scaled = int(move_x * scale)
-            move_y_scaled = int(move_y * scale)
+            move_x_scaled = int(move_x * self.smooth)
+            move_y_scaled = int(move_y * self.smooth)
             
             target_move_x = move_x if not move_x_scaled else move_x_scaled
             target_move_y = move_y if not move_y_scaled else move_y_scaled
@@ -151,6 +153,28 @@ class MainOverlay(QMainWindow):
     
     def get_scale(self) -> float:
         return self.scale
+
+    
+    def set_smooth(self, value: float) -> None:
+        self.smooth = (self.transform(value / 100))
+        print(self.smooth, 'set')
+
+    
+    def get_smooth(self, transform=True) -> float:
+        if transform:
+            value = self.transform(self.smooth)
+        else:
+            value = self.smooth
+        return value
+    
+    
+    def transform(self, value: float, min=0.05, max=0.25) -> float:
+        # Transforming value through normalization, scaling and denormalization.
+        delta = max - min
+        difference = (value / max * 100)
+        scale = (-1 - max) / 100 * difference + (1 + max)
+
+        return min + delta * scale
     
     
     def paintEvent(self, event: QPaintEvent) -> None:
