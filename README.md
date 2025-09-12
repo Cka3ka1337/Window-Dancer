@@ -24,7 +24,7 @@
 
 ## Preview
 <div align="center">
-  <img alt="image" src="https://github.com/Cka3ka1337/Window-Dancer/blob/main/preview.png" />
+  <img alt="image" src="https://github.com/Cka3ka1337/Window-Dancer/blob/main/preview.png?raw=true" />
 </div>
 
 
