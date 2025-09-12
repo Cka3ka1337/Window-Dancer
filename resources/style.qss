@@ -106,19 +106,19 @@ ClearStartupButtom:focus { outline: none; }
 
 
 
-ScaleSlider::groove:horizontal {
+QSlider::groove:horizontal {
     height: 10px;
     background: #4b474747;
     border-radius: 5px;
 }
 
-ScaleSlider::sub-page:horizontal {
+QSlider::sub-page:horizontal {
     height: 4px;
     background: #634e4e4e;
     border-radius: 5px;
 }
 
-ScaleSlider::handle:horizontal {
+QSlider::handle:horizontal {
     background: #ff707070;
     width: 15px;
     border-radius: 5px;
@@ -126,29 +126,29 @@ ScaleSlider::handle:horizontal {
 
 
 
-CheckBox {
+QCheckBox {
     color: #ffffffff;
 }
-CheckBox::indicator {
+QCheckBox::indicator {
     border: 1px solid #4b686868;
     background-color: #4b474747;
     border-radius: 3px;
 }
-CheckBox::indicator:pressed {
-    background-color: #4b4b4b;
+QCheckBox::indicator:pressed {
     border: 1px solid #8b8b8b;
+    background-color: #3f3f3f;
 }
 
-CheckBox::indicator:checked {
-    border: 1px solid #8b8b8b;
-    background-color: #ff5e5e5e;
+QCheckBox::indicator:checked {
+    border: 1px solid #6b6b6b;
+    background-color: #3f3f3f;
 }
 
-CheckBox::indicator:checked:pressed {
+QCheckBox::indicator:checked:pressed {
     border: 1px solid #4b686868;
     background-color: #ff5e5e5e;
 }
 
-CheckBox::indicator:unchecked:hover {
+QCheckBox::indicator:unchecked:hover {
     background-color: #80474747;
 }
