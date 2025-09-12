@@ -23,18 +23,16 @@ class Slider(QSlider):
         self.setMinimum(self.min)
         self.setMaximum(self.max)
         
-        if path != 'smooth':
+        if path == 'smooth':
+            value = self.shared.get(f'{self.path}.get')() * 100
+            self.setValue(value)
+        else:
             value = self.shared.get(f'{self.path}.get')()
             self.set_scale(value)
         
-        else:
-            value = self.shared.get(f'{self.path}.get')() * 100
-            self.setValue(value)
-            print('SliderSet', value)
     
     
     def set_scale(self, scale: float) -> None:
-        # print(scale, 'SetSlider', self.min + (self.max - self.min) * scale)
         self.setValue(
             self.min + (self.max - self.min) * scale
         )

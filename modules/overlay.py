@@ -157,7 +157,6 @@ class MainOverlay(QMainWindow):
     
     def set_smooth(self, value: float) -> None:
         self.smooth = (self.transform(value / 100))
-        print(self.smooth, 'set')
 
     
     def get_smooth(self, transform=True) -> float:
