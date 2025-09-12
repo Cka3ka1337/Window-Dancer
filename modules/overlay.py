@@ -11,9 +11,8 @@ from PySide6.QtGui import (
     QMovie, QPainter, QPaintEvent
 )
 
-from scripts import calculate
 from scripts.shared import SharedData
-from scripts.targets import get_target_window
+from scripts.targets import get_target_position
 from scripts.config_system import ConfigSystem
 
 
@@ -26,8 +25,6 @@ class MainOverlay(QMainWindow):
     gif_size = None
     prev_valid_pos = (0, 0)
     prev_rect = (0, 0, 0, 0)
-    
-    animation_move_ended = False
     
     def __init__(self):
         super().__init__()
@@ -88,34 +85,8 @@ class MainOverlay(QMainWindow):
     
     @Slot()
     def _update_window_pos(self) -> None:
-        rect, type, wname, hwnd = get_target_window()
-        x, y, w, h = rect
-        overlay = self.size()
-        target = None
+        target = get_target_position(self.size())
         animated_movement = bool(self.shared.get('animated_movement'))
-        
-        if type == 'window' or type == 'cursor':
-        
-            if rect != self.prev_rect or animated_movement or not self.animation_move_ended:
-                
-                target = calculate.window_cursor(x, y, w, h, overlay)
-                if target[1] <= 0:
-                    rect, type, wname, hwnd = get_target_window(True)
-                    x, y, w, h = rect
-                    
-                    target = calculate.desktop(x, y, w, h, overlay)
-        
-        elif type == 'desktop':
-            
-            if rect != self.prev_rect or animated_movement or not self.animation_move_ended:
-                
-                target = calculate.desktop(x, y, w, h, overlay)
-        
-        
-        self.prev_rect = rect
-        if target is None:
-            return
-
         
         if animated_movement:
             pos = self.pos()
@@ -130,14 +101,9 @@ class MainOverlay(QMainWindow):
             target_move_x = move_x if not move_x_scaled else move_x_scaled
             target_move_y = move_y if not move_y_scaled else move_y_scaled
             
-            self.animation_move_ended = not move_x_scaled and not move_y_scaled
-            
             self.move(pos.x() + target_move_x, pos.y() + target_move_y)
             
         else:
-            if target == (0, 0):
-                self.animation_move_ended = True
-            
             self.move(*target)
         
     
