@@ -27,7 +27,7 @@ class MainGroup(QGroupBox):
         self.choice_gif_btn = ChoiceGifButton('Choice animation')
         self.animated_movement = CheckBox(
             'animated_movement',
-            'Animated Overlay Movement'
+            'Smooth movement'
         )
         
         slider_layout.addWidget(self.scale_slider)
