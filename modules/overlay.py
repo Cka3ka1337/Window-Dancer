@@ -1,7 +1,7 @@
 import ctypes
 
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QVBoxLayout,
+    QMainWindow, QVBoxLayout,
     QLabel, QWidget
 )
 from PySide6.QtCore import (

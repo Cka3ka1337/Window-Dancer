@@ -18,7 +18,6 @@ class SharedData(QObject):
         if not hasattr(self, '_initialized'):
             super().__init__()
             self._initialized = True
-            self._shared_data = {}
     
     
     def get(self, path: str):

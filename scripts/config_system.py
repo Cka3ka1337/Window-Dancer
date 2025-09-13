@@ -11,22 +11,8 @@ class ConfigSystem:
     __instance = None
     config = {}
     _config_path = os.path.join(
-        win32api.GetSystemDirectory()[:2],
-        'Users',
-        os.getlogin(),
-        'Documents',
-        'Window-Dancer',
-        'config.toml'
+        'C:/Users', os.getlogin(), 'Documents/Window-Dancer/config.toml'
     )
-    
-    
-    def __init__(self) -> None:
-        self.config_path = Path(self._config_path)
-        self.config_dir = self.config_path.parent
-        self.config_dir.mkdir(parents=True, exist_ok=True)
-        
-        self.load_config()
-    
 
     def save_config(self):
         try:
@@ -49,12 +35,12 @@ class ConfigSystem:
                     self.config.update(tomllib.load(file))
                 
             except (tomllib.TOMLDecodeError, FileNotFoundError) as e:
-                self.config = self.get_default_config()
-                self.save_config()
+                self.config = self.get_default_config(self)
+                self.save_config(self)
             
         else:
-            self.config = self.get_default_config()
-            self.save_config()
+            self.config = self.get_default_config(self)
+            self.save_config(self)
     
     
     def get_default_config(self):
@@ -108,5 +94,12 @@ class ConfigSystem:
     def __new__(cls):
         if cls.__instance is None:
             cls.__instance = super(ConfigSystem, cls).__new__(cls)
+        
+            cls.config_path = Path(cls._config_path)
+            cls.config_dir = cls.config_path.parent
+            print(f'Path: {cls.config_path}', f'Dir: {cls.config_dir}')
+            cls.config_dir.mkdir(parents=True, exist_ok=True)
             
+            cls.load_config(cls)
+        
         return cls.__instance
