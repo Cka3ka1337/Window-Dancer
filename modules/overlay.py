@@ -24,8 +24,10 @@ class MainOverlay(QMainWindow):
     scale = 1 if config.get('startup.scale') is None else config.get('startup.scale')
     smooth = 0.125 if config.get('startup.smooth') is None else config.get('startup.smooth')
     gif_size = None
-    prev_valid_pos = (0, 0)
-    prev_rect = (0, 0, 0, 0)
+    
+    target = (0, 0)
+    previous = (0, 0)
+    current = (0, 0)
     
     def __init__(self):
         super().__init__()
@@ -45,6 +47,10 @@ class MainOverlay(QMainWindow):
         self.shared.set('scale.set', self.set_scale)
         self.shared.set('smooth.get', self.get_smooth)
         self.shared.set('smooth.set', self.set_smooth)
+        
+        self.shared.set('target.get', self.get_target)
+        self.shared.set('previous.get', self.get_previous)
+        self.shared.set('current.get', self.get_current)
     
     
     def _init_timers(self) -> None:
@@ -91,6 +97,7 @@ class MainOverlay(QMainWindow):
         target = get_target_position(self.size())
         animated_movement = bool(self.shared.get('animated_movement'))
         
+        
         if animated_movement:
             pos = self.pos()
             
@@ -104,10 +111,15 @@ class MainOverlay(QMainWindow):
             target_move_y = move_y if not move_y_scaled else move_y_scaled
             
             self.move(pos.x() + target_move_x, pos.y() + target_move_y)
-            
+            if target != self.target:
+                self.previous = self.target
+                self.current = (pos.x() + target_move_x, pos.y() + target_move_y)
+                
+            self.target = target
+   
         else:
             self.move(*target)
-        
+            
     
     def set_movie(self, path: str, reload: bool=False) -> None:
         if path == self.path and not reload:
@@ -135,7 +147,6 @@ class MainOverlay(QMainWindow):
             int(self.gif_size.height() * self.scale)
         )
         
-        self.prev_rect = (0, 0, 0, 0)
         self.movie.setScaledSize(size)
         self.setFixedSize(size)
     
@@ -153,6 +164,18 @@ class MainOverlay(QMainWindow):
     
     def get_scale(self) -> float:
         return self.scale
+    
+    
+    def get_target(self) -> tuple:
+        return self.target
+    
+    
+    def get_previous(self) -> tuple:
+        return self.previous
+
+    
+    def get_current(self) -> tuple:
+        return self.current
 
     
     def set_smooth(self, value: float) -> None:

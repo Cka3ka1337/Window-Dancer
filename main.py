@@ -1,13 +1,19 @@
 import os
 import sys
+import ctypes
 
-from PySide6.QtCore import QTimer
-from PySide6.QtWidgets import QApplication
+import win32api
+
+from PySide6.QtCore import QTimer, Qt
+from PySide6.QtGui import QMouseEvent, QPainter, QPen, QColor, QPaintEvent
+from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QLabel, QWidget
 
 from modules.ui import MainWindow
+from scripts.shared import SharedData
 from modules.overlay import MainOverlay
 from scripts.config_system import ConfigSystem
-        
+from scripts.interpolation import InteractiveInterpolation
+
     
 def update_style(app) -> None:
     path = os.path.join(os.path.dirname(__file__), 'resources/style.qss')
@@ -29,9 +35,11 @@ def main() -> None:
     
     overlay = MainOverlay()
     window = MainWindow()
+    inter = InteractiveInterpolation()
 
     overlay.show()
     window.show()
+    inter.show()
     
     sys.exit(app.exec())
 
