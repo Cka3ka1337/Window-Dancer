@@ -40,6 +40,40 @@ MainGroup QGroupBox::title {
 
 
 
+InteractiveInterpolation{
+    background-color: #b70e0622;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+InteractiveInterpolation QGroupBox {
+    padding: 10px 2px 0px 2px;
+    font-family: 'Cascadia code';
+    color: #FFFFFF;
+    font-size: 11px;
+    background-color: #e83f4770;
+    border-radius: 5px;
+    border: 1px solid #ffa0a0a0;
+}
+
+InteractiveInterpolation QGroupBox::title {
+    subcontrol-position: top;
+    /* margin-top: -5px; */
+}
+
+InteractiveInterpolation QLabel {
+    font-family: 'Cascadia code';
+    color: #FFFFFF;
+    font-size: 12px;
+    padding: 2px 2px 2px 2px;
+    font-weight: bold;
+    border: 1px;
+    border-radius: 5px;
+    background-color: #494d4d4d;
+}
+
+
+
 ChoiceGifButton {
     font-family: 'Cascadia code';
     color: #FFFFFF;
