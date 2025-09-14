@@ -12,7 +12,6 @@ from modules.ui import MainWindow
 from scripts.shared import SharedData
 from modules.overlay import MainOverlay
 from scripts.config_system import ConfigSystem
-from scripts.interpolation import InteractiveInterpolation
 
     
 def update_style(app) -> None:
@@ -35,11 +34,9 @@ def main() -> None:
     
     overlay = MainOverlay()
     window = MainWindow()
-    inter = InteractiveInterpolation()
 
     overlay.show()
     window.show()
-    inter.show()
     
     sys.exit(app.exec())
 
