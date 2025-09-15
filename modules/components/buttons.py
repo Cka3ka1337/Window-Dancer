@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QPushButton, QFileDialog
 
+from scripts.constants import *
 from scripts.shared import SharedData
 from scripts.config_system import ConfigSystem
 
@@ -8,38 +9,37 @@ class SetStartupButtom(QPushButton):
     config = ConfigSystem()
     shared = SharedData()
     
+    
     def __init__(self, title: str):
         super().__init__(title)
         self.clicked.connect(self.set_startup)
         
     
     def set_startup(self) -> None:
-        get_movie = self.shared.get('movie.get')
-        get_scale = self.shared.get('scale.get')
-        get_smoot = self.shared.get('smooth.get')
+        movie_get = self.shared.get(Methods.MOVIE_GET)
+        scale_get = self.shared.get(Methods.SCALE_GET)
+        smoot_get = self.shared.get(Methods.SMOOTH_GET)
         
-        if set is None:
-            return
-        
-        self.config.set('startup.path', get_movie())
-        self.config.set('startup.scale', get_scale())
-        self.config.set('startup.animated_movement', self.shared.get('animated_movement'))
-        self.config.set('startup.smooth', get_smoot(False))
+        self.config.set(ConfigKeys.PATH, movie_get())
+        self.config.set(ConfigKeys.SCALE, scale_get())
+        self.config.set(ConfigKeys.ANIMATED_MOVEMENT, self.shared.get(Variables.ANIMATED_MOVEMENT))
+        self.config.set(ConfigKeys.SMOOTH, smoot_get())
 
 
 class ClearStartupButtom(QPushButton):
     config = ConfigSystem()
     
+    
     def __init__(self, title: str):
         super().__init__(title)
         self.clicked.connect(self.set_startup)
         
     
     def set_startup(self) -> None:
-        self.config.set('startup.path', '')
-        self.config.set('startup.scale', 0.5)
-        self.config.set('startup.animated_movement', False)
-        self.config.set('startup.smoothness', 0.125)
+        self.config.set(ConfigKeys.PATH, ConfigDefaults.PATH)
+        self.config.set(ConfigKeys.scale, ConfigDefaults.SCALE)
+        self.config.set(ConfigKeys.ANIMATED_MOVEMENT, ConfigDefaults.ANIMATED_MOVEMENT)
+        self.config.set(ConfigKeys.SMOOTH, ConfigDefaults.SMOOTH)
 
 
 class TitleBarButton(QPushButton):
@@ -71,7 +71,7 @@ class ChoiceGifButton(QPushButton):
         
     
     def open_file_dialog(self) -> None:
-        set_movie = self.shared.get('movie.set')
+        set_movie = self.shared.get(Methods.MOVIE_SET)
         if set_movie is None:
             return
         

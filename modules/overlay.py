@@ -1,37 +1,35 @@
 import ctypes
 
-import numpy as np
-
-from scipy import interpolate
 from PySide6.QtWidgets import (
-    QMainWindow, QVBoxLayout,
-    QLabel, QWidget
+    QMainWindow, QVBoxLayout, QWidget
 )
 from PySide6.QtCore import (
-    Qt, QSize, QTimer, Slot
+    Qt, QTimer, Slot
 )
 from PySide6.QtGui import (
-    QMovie, QPainter, QPaintEvent
+    QPainter, QPaintEvent
 )
 
+from scripts.constants import *
 from scripts.shared import SharedData
-from scripts.targets import get_target_position
 from scripts.config_system import ConfigSystem
-from scripts.interpolation import Interpolation
+from scripts.targets import get_target_position
 from modules.components.gif_view import GifView
+from scripts.interpolation import InterpolationAlgorithm
 
 
 class MainOverlay(QMainWindow):
     shared = SharedData()
     config = ConfigSystem()
-    interpolation = Interpolation()
+    interpolation = InterpolationAlgorithm()
     
-    smooth = 0.125 if config.get('startup.smooth') is None else config.get('startup.smooth')
+    smooth = config.get(ConfigKeys.SMOOTH, InterpolationParams.SMOOTHNESS_DEFAULT)
+    min = InterpolationParams.SMOOTHNESS_MIN
+    max = InterpolationParams.SMOOTHNESS_MAX
     
     target = (0, 0)
     previous = (0, 0)
     current = (0, 0)
-    
     
     
     def __init__(self):
@@ -46,16 +44,15 @@ class MainOverlay(QMainWindow):
         
     
     def _init_hooks(self) -> None:
-        self.shared.set('movie.get', self.movie.get_movie)
-        self.shared.set('movie.set', self.movie.set_movie)
-        self.shared.set('scale.get', self.movie.get_scale)
-        self.shared.set('scale.set', self.movie.set_scale)
-        self.shared.set('smooth.get', self.get_smooth)
-        self.shared.set('smooth.set', self.set_smooth)
-        
-        self.shared.set('target.get', self.get_target)
-        self.shared.set('previous.get', self.get_previous)
-        self.shared.set('current.get', self.get_current)
+        self.shared.set(Methods.MOVIE_GET,      self.movie.get_movie)
+        self.shared.set(Methods.MOVIE_SET,      self.movie.set_movie)
+        self.shared.set(Methods.SCALE_GET,      self.movie.get_scale)
+        self.shared.set(Methods.SCALE_SET,      self.movie.set_scale)
+        self.shared.set(Methods.SMOOTH_GET,           self.get_smooth)
+        self.shared.set(Methods.SMOOTH_SET,           self.set_smooth)
+        self.shared.set(Methods.TARGET_GET,           self.get_target)
+        self.shared.set(Methods.CURRENT_GET,          self.get_current)
+        self.shared.set(Methods.PREVIOUS_GET,         self.get_previous)
         
         self.movie.frameChanged.connect(self.update)
     
@@ -63,7 +60,7 @@ class MainOverlay(QMainWindow):
     def _init_timers(self) -> None:
         self.update_window_pos_timer = QTimer()
         self.update_window_pos_timer.timeout.connect(self._update_window_pos)
-        self.update_window_pos_timer.start(self.config.get('overlay.update_pos_delay_ms'))
+        self.update_window_pos_timer.start(self.config.get(ConfigKeys.UPDATE_OVERLAY_DELAY, ConfigDefaults.UPDATE_OVERLAY_DELAY))
     
     
     def _init_window(self) -> None:
@@ -94,15 +91,17 @@ class MainOverlay(QMainWindow):
     
     @Slot()
     def _update_window_pos(self) -> None:
-        target = get_target_position(self.size())
-        animated_movement = bool(self.shared.get('animated_movement'))
-
+        print(self.smooth)
         
-        offset_x, offset_y = self.interpolation.next(self.overlay_pos.copy(), target, self.smooth)
+        target = get_target_position(self.size())
+        animated_movement = self.shared.get(Variables.ANIMATED_MOVEMENT)
+        
+        offset_x, offset_y = self.interpolation.next(self.overlay_pos.copy(), target, self.smooth / 1000)
+        # print(self.smooth / 1000, offset_x, offset_y)
+        
         self.overlay_pos[0] += offset_x
         self.overlay_pos[1] += offset_y
         
-        # self.move(round(self.overlay_pos[0]), round(self.overlay_pos[1]))
         self.move(self.overlay_pos[0], self.overlay_pos[1])
     
     
@@ -119,24 +118,20 @@ class MainOverlay(QMainWindow):
 
     
     def set_smooth(self, value: float) -> None:
-        self.smooth = (self.transform(value / 100))
+        self.smooth = value
 
     
-    def get_smooth(self, transform=True) -> float:
-        if transform:
-            value = self.transform(self.smooth)
-        else:
-            value = self.smooth
-        return value
+    def get_smooth(self) -> float:
+        return self.smooth
     
     
-    def transform(self, value: float, min=0.05, max=0.25) -> float:
+    def transform(self, value: float) -> float:
         # Transforming value through normalization, scaling and denormalization.
-        delta = max - min
-        difference = (value / max * 100)
-        scale = (-1 - max) / 100 * difference + (1 + max)
+        delta = self.max - self.min
+        difference = (value / self.max * 100)
+        scale = (-1 - self.max) / 100 * difference + (1 + self.max)
 
-        return min + delta * scale
+        return self.min + delta * scale
     
     
     def paintEvent(self, event: QPaintEvent) -> None:

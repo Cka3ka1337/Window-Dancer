@@ -1,15 +1,10 @@
 import os
 import sys
-import ctypes
 
-import win32api
-
-from PySide6.QtCore import QTimer, Qt
-from PySide6.QtGui import QMouseEvent, QPainter, QPen, QColor, QPaintEvent
-from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QLabel, QWidget
+from PySide6.QtCore import QTimer
+from PySide6.QtWidgets import QApplication
 
 from modules.ui import MainWindow
-from scripts.shared import SharedData
 from modules.overlay import MainOverlay
 from scripts.config_system import ConfigSystem
 

@@ -21,6 +21,7 @@ class SharedData(QObject):
     
     
     def get(self, path: str):
+        path = str(path)
         path = path.split('.')
         result = self._shared_data
         
@@ -34,6 +35,7 @@ class SharedData(QObject):
     
 
     def set(self, path: str, value):
+        path = str(path)
         _path = path.split('.')
         result = self._shared_data
         

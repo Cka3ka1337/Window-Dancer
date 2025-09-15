@@ -1,6 +1,7 @@
 from PySide6.QtGui import QMovie
 from PySide6.QtCore import QSize
 
+from scripts.constants import *
 from scripts.shared import SharedData
 from scripts.config_system import ConfigSystem
 
@@ -9,9 +10,10 @@ class GifView(QMovie):
     shared = SharedData()
     config = ConfigSystem()
     
-    path = '' if config.get('startup.path') is None else config.get('startup.path')
-    scale = 1 if config.get('startup.scale') is None else config.get('startup.scale')
+    path = config.get(ConfigKeys.PATH, ConfigDefaults.PATH)
+    scale = config.get(ConfigKeys.SCALE, ConfigDefaults.SCALE)
     gif_size = None
+    
     
     def __init__(self, setFixedSize):
         super().__init__()
@@ -22,7 +24,7 @@ class GifView(QMovie):
     
     
     def set_movie(self, path: str, reload: bool=False) -> None:
-        if path == self.path and not reload:
+        if (path == self.path and not reload) or not path:
             return 
         
         self.path = path

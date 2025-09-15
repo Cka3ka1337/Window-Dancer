@@ -3,6 +3,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Slot
 
+from scripts.constants import *
 from scripts.shared import SharedData
 from modules.components.slider import Slider
 from modules.components.check_box import CheckBox
@@ -21,10 +22,22 @@ class MainGroup(QGroupBox):
     
     
     def _init_sliders(self) -> None:
-        self.scale_slider = Slider('scale', 5, 100, 100) # 0.05-1.0
+        self.scale_slider = Slider(
+            Methods.SCALE_GET,
+            Methods.SCALE_SET,
+            Ui.SCALE_MIN,
+            Ui.SCALE_MAX,
+            100
+        )
         self.scale_slider.valueChanged.connect(self.slot)
         
-        self.smoothness_slider = Slider('smooth', 5, 25, 1) # 0.05 - 0.25
+        self.smoothness_slider = Slider(
+            Methods.SMOOTH_GET,
+            Methods.SMOOTH_SET,
+            Ui.SMOOTHNESS_MIN,
+            Ui.SMOOTHNESS_MAX,
+            1
+        )
         self.smoothness_slider.valueChanged.connect(self.slot)
         
     
@@ -33,13 +46,12 @@ class MainGroup(QGroupBox):
         self.config_clear_btn = ClearStartupButtom('Clear Startup')
         self.choice_gif_btn = ChoiceGifButton('Choice animation')
         self.animated_movement = CheckBox(
-            'animated_movement',
+            ConfigKeys.ANIMATED_MOVEMENT,
             'Smooth movement'
         )
     
     
     def _init_ui(self) -> None:
-        # Inits
         vertical = QVBoxLayout(self)
         
         slider_group = QGroupBox('Scale')
@@ -71,7 +83,9 @@ class MainGroup(QGroupBox):
     @Slot()
     def slot(self, value) -> None:
         sender = self.sender()
-        func = self.shared.get(f'{sender.path}.set')
+        
+        func = self.shared.get(sender.set_id)
+        
         if func is None:
             return
         

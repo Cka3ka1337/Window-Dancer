@@ -11,9 +11,9 @@ from PySide6.QtGui import (
     QPaintEvent
 )
 
+from scripts.config_system import ConfigSystem
 from modules.components.titlebar import TitleBar
 from modules.components.main_group import MainGroup
-from scripts.config_system import ConfigSystem
 
 
 class MainWindow(QMainWindow):
@@ -21,6 +21,7 @@ class MainWindow(QMainWindow):
     _drag_position = None
     _opacity = 0
     config = ConfigSystem()
+    
     
     def __init__(self):
         super().__init__()
