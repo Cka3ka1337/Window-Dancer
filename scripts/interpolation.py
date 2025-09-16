@@ -1,11 +1,56 @@
 import math
 
+from scripts.constants import *
 
-class InterpolationAlgorithm:
-    def __init__(self):
-        self.angle_norm = 0
-        self.angle_scale = 0.2
-        self.threshold = 50 # distance px
+
+class Instant:
+    def next(self, start_pos: tuple, end_pos: tuple) -> tuple:
+        sx, sy = start_pos
+        ex, ey = end_pos
+        
+        delta_x = ex - sx
+        delta_y = ey - sy
+
+        return delta_x, delta_y
+
+
+class Linear:
+    threshold = InterpolationParams.INTERPOLATION_THRESHOLD # distance px
+
+    
+    def next(self, start_pos: tuple, end_pos: tuple, smooth: float) -> tuple:
+        sx, sy = start_pos
+        ex, ey = end_pos
+        
+        delta_x = ex - sx
+        delta_y = ey - sy
+        
+        try:
+            distance = math.sqrt(delta_x ** 2 + delta_y ** 2)
+        except OverflowError:
+            return 0, 0
+        
+        if distance < self.threshold:
+            smooth *= 2
+        
+        if distance < 1:
+            return 0, 0
+        
+        angle = math.atan2(delta_y, delta_x)
+        
+        direction_x = math.cos(angle)
+        direction_y = math.sin(angle)
+        
+        offset_x = (distance * direction_x) * smooth
+        offset_y = (distance * direction_y) * smooth
+
+        return offset_x, offset_y
+
+
+class SmoothedDirection:
+    angle_norm = 0
+    angle_scale = 0.2
+    threshold = InterpolationParams.INTERPOLATION_THRESHOLD # distance px
 
         
     def next(self, start_pos: tuple, end_pos: tuple, smooth: float) -> tuple:
