@@ -12,8 +12,7 @@ class Slider(QSlider):
                  get_id: int,
                  set_id: int,
                  min: int=0,
-                 max: int=100,
-                 divider: float=1,
+                 max: int=100
                  ):
         super().__init__(Qt.Orientation.Horizontal)
         
@@ -21,21 +20,16 @@ class Slider(QSlider):
         self.set_id = set_id
         self.min = min
         self.max = max
-        self.divider = divider
         
         self.setMinimum(self.min)
         self.setMaximum(self.max)
         
-        # if get_id == Methods.SMOOTH_GET:
-        #     value = self.shared.get(Methods.SMOOTH_GET)() * 100
-        #     self.setValue(value)
-            
-        # else:
-        #     value = self.shared.get(Methods.SCALE_GET)()
-        #     self.set_scale(value)
+        value = self.shared.get(self.get_id)()
+        self.setValue(value)
         
     
-    def set_scale(self, scale: float) -> None:
-        self.setValue(
-            self.min + (self.max - self.min) * scale
-        )
+    # def set_scale(self, scale: float) -> None:
+    #     self.setValue(
+    #         scale
+    #     )
+    #     print(self.min + (self.max - self.min) * scale, self.get_id, scale)

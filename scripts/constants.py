@@ -1,7 +1,8 @@
 class InterpolationParams:
-    SMOOTHNESS_MIN = 5
-    SMOOTHNESS_MAX = 25
+    SMOOTHNESS_MIN = 25
+    SMOOTHNESS_MAX = 50
     SMOOTHNESS_DEFAULT = SMOOTHNESS_MIN + (SMOOTHNESS_MAX - SMOOTHNESS_MIN) / 2
+    SMOOTHNESS_DEVIDER = 1000
 
     # Расстояние, после которого перестаёт учитываться угол движения при интерполяции
     INTERPOLATION_THRESHOLD = 50

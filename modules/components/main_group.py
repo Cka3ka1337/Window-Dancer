@@ -26,8 +26,7 @@ class MainGroup(QGroupBox):
             Methods.SCALE_GET,
             Methods.SCALE_SET,
             Ui.SCALE_MIN,
-            Ui.SCALE_MAX,
-            100
+            Ui.SCALE_MAX
         )
         self.scale_slider.valueChanged.connect(self.slot)
         
@@ -35,8 +34,7 @@ class MainGroup(QGroupBox):
             Methods.SMOOTH_GET,
             Methods.SMOOTH_SET,
             Ui.SMOOTHNESS_MIN,
-            Ui.SMOOTHNESS_MAX,
-            1
+            Ui.SMOOTHNESS_MAX
         )
         self.smoothness_slider.valueChanged.connect(self.slot)
         
@@ -89,4 +87,4 @@ class MainGroup(QGroupBox):
         if func is None:
             return
         
-        func(value / sender.divider)
+        func(value)

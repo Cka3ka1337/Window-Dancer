@@ -54,7 +54,7 @@ class GifView(QMovie):
     
     
     def set_scale(self, scale: float) -> None:
-        self.scale = scale
+        self.scale = scale / 100
         
         if self.path:
             self.set_movie(self.path, True)
@@ -65,4 +65,4 @@ class GifView(QMovie):
     
     
     def get_scale(self) -> float:
-        return self.scale
+        return round(self.scale * 100)

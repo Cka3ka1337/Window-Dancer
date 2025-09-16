@@ -91,13 +91,10 @@ class MainOverlay(QMainWindow):
     
     @Slot()
     def _update_window_pos(self) -> None:
-        print(self.smooth)
-        
         target = get_target_position(self.size())
         animated_movement = self.shared.get(Variables.ANIMATED_MOVEMENT)
         
-        offset_x, offset_y = self.interpolation.next(self.overlay_pos.copy(), target, self.smooth / 1000)
-        # print(self.smooth / 1000, offset_x, offset_y)
+        offset_x, offset_y = self.interpolation.next(self.overlay_pos.copy(), target, self.transform(self.smooth) / InterpolationParams.SMOOTHNESS_DEVIDER)
         
         self.overlay_pos[0] += offset_x
         self.overlay_pos[1] += offset_y
@@ -126,12 +123,16 @@ class MainOverlay(QMainWindow):
     
     
     def transform(self, value: float) -> float:
-        # Transforming value through normalization, scaling and denormalization.
-        delta = self.max - self.min
-        difference = (value / self.max * 100)
-        scale = (-1 - self.max) / 100 * difference + (1 + self.max)
-
-        return self.min + delta * scale
+        min = InterpolationParams.SMOOTHNESS_MIN
+        max = InterpolationParams.SMOOTHNESS_MAX
+        
+        if value < min or value > max:
+            assert OverflowError()
+        
+        
+        result = min + max * (-1 / max * value + 1)
+        
+        return result
     
     
     def paintEvent(self, event: QPaintEvent) -> None:
