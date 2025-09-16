@@ -79,8 +79,8 @@ class MainWindow(QMainWindow):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         gradient = QLinearGradient(QPointF(0, 0), QPointF(self.width(), self.height()))
-        gradient.setColorAt(0.0, QColor(20, 10, 40, 240))
-        gradient.setColorAt(1.0, QColor(15, 30, 70, 200))
+        gradient.setColorAt(0.0, QColor(20, 10, 40, 240)) # #140A28
+        gradient.setColorAt(1.0, QColor(15, 30, 70, 200)) # #0F1E46
         
         painter.setBrush(QBrush(gradient))
         painter.setPen(Qt.PenStyle.SolidLine)

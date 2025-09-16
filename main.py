@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication
@@ -18,7 +19,7 @@ def update_style(app) -> None:
 
 def main() -> None:
     config = ConfigSystem()
-    print(config.config)
+    print(json.dumps(config.config, indent=4))
     
     app = QApplication(sys.argv)
     

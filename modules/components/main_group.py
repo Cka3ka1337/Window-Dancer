@@ -7,6 +7,7 @@ from scripts.constants import *
 from scripts.shared import SharedData
 from modules.components.slider import Slider
 from modules.components.check_box import CheckBox
+from modules.components.combo_box import ComboBox
 from modules.components.buttons import (
     ChoiceGifButton, SetStartupButtom, ClearStartupButtom)
 
@@ -16,12 +17,11 @@ class MainGroup(QGroupBox):
     
     def __init__(self):
         super().__init__()
-        self._init_buttons()
-        self._init_sliders()
+        self._init_elements()
         self._init_ui()
     
     
-    def _init_sliders(self) -> None:
+    def _init_elements(self) -> None:
         self.scale_slider = Slider(
             Methods.SCALE_GET,
             Methods.SCALE_SET,
@@ -38,15 +38,10 @@ class MainGroup(QGroupBox):
         )
         self.smoothness_slider.valueChanged.connect(self.slot)
         
-    
-    def _init_buttons(self) -> None:    
         self.config_set_btn = SetStartupButtom('Set Startup')
         self.config_clear_btn = ClearStartupButtom('Clear Startup')
         self.choice_gif_btn = ChoiceGifButton('Choice animation')
-        self.animated_movement = CheckBox(
-            ConfigKeys.ANIMATED_MOVEMENT,
-            'Smooth movement'
-        )
+        self.interpolation_combo = ComboBox(['Instant', 'Linear', 'SDI*'], 'Movement Mode')
     
     
     def _init_ui(self) -> None:
@@ -60,11 +55,16 @@ class MainGroup(QGroupBox):
         smoothness_layout = QHBoxLayout(smoothness_group)
         smoothness_layout.setContentsMargins(0, 0, 0, 0)
         
+        interpolation_group = QGroupBox('Movement mode')
+        interpolation_layout = QHBoxLayout(interpolation_group)
+        # interpolation_layout.setContentsMargins(0, 0, 0, 0)
+        
         config_layout = QHBoxLayout()
         
         # adds
         slider_layout.addWidget(self.scale_slider)
         smoothness_layout.addWidget(self.smoothness_slider)
+        interpolation_layout.addWidget(self.interpolation_combo)
         
         config_layout.addWidget(self.config_clear_btn)
         config_layout.addWidget(self.config_set_btn)
@@ -72,7 +72,7 @@ class MainGroup(QGroupBox):
         vertical.addWidget(self.choice_gif_btn)
         vertical.addWidget(slider_group)
         vertical.addWidget(smoothness_group)
-        vertical.addWidget(self.animated_movement)
+        vertical.addWidget(interpolation_group)
         
         vertical.addStretch()
         vertical.addLayout(config_layout)

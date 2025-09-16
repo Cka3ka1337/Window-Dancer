@@ -93,7 +93,6 @@ class ConfigSystem:
             config = config[k]
         
         config[keys[-1]] = value
-        self.save_config()
     
     
     def __new__(cls):
