@@ -15,13 +15,16 @@ from scripts.shared import SharedData
 from scripts.config_system import ConfigSystem
 from scripts.targets import get_target_position
 from modules.components.gif_view import GifView
-from scripts.interpolation import InterpolationAlgorithm
+from scripts.interpolation import Instant, Linear, SmoothedDirection
 
 
 class MainOverlay(QMainWindow):
     shared = SharedData()
     config = ConfigSystem()
-    interpolation = InterpolationAlgorithm()
+    
+    instant = Instant()
+    linear = Linear()
+    SDInterpolation = SmoothedDirection()
     
     smooth = config.get(ConfigKeys.SMOOTH, InterpolationParams.SMOOTHNESS_DEFAULT)
     min = InterpolationParams.SMOOTHNESS_MIN
@@ -91,10 +94,12 @@ class MainOverlay(QMainWindow):
     
     @Slot()
     def _update_window_pos(self) -> None:
+        # print(self.smooth)
         target = get_target_position(self.size())
         animated_movement = self.shared.get(Variables.ANIMATED_MOVEMENT)
         
-        offset_x, offset_y = self.interpolation.next(self.overlay_pos.copy(), target, self.transform(self.smooth) / InterpolationParams.SMOOTHNESS_DEVIDER)
+        # offset_x, offset_y = self.SDInterpolation.next(self.overlay_pos.copy(), target, self.transform(self.smooth) / InterpolationParams.SMOOTHNESS_DEVIDER)
+        offset_x, offset_y = self.linear.next(self.overlay_pos.copy(), target, self.transform(self.smooth) / InterpolationParams.SMOOTHNESS_DEVIDER)
         
         self.overlay_pos[0] += offset_x
         self.overlay_pos[1] += offset_y
@@ -127,8 +132,8 @@ class MainOverlay(QMainWindow):
         max = InterpolationParams.SMOOTHNESS_MAX
         
         if value < min or value > max:
-            assert OverflowError()
-        
+            result = max
+            assert OverflowError('OutOfRange')
         
         result = min + max * (-1 / max * value + 1)
         
