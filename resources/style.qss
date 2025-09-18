@@ -190,9 +190,10 @@ QComboBox::drop-down {
 }
 
 QComboBox QAbstractItemView {
-    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                 stop: 0.4 #231F32,
-                                 stop: 1.0 #ea0f1e46);
+    /* background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0.4 #2c2c2c,
+                                 stop: 1.0 #444444); */
+    background-color: #202020;
 
     font-family: 'Cascadia code';
     color: #FFFFFF;
@@ -219,6 +220,7 @@ QComboBox QAbstractItemView::item {
     border: none;
     background-color: none;
     padding: 0px 2px 0px 2px;
+    color: #FFFFFF;
 }
 
 QComboBox QAbstractItemView::item:hover {

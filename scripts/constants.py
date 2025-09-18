@@ -1,12 +1,13 @@
 class InterpolationParams:
-    SMOOTHNESS_MIN = 5
-    SMOOTHNESS_MAX = SMOOTHNESS_MIN + 15
+    SMOOTHNESS_MIN = 2
+    SMOOTHNESS_MAX = SMOOTHNESS_MIN + 20
     SMOOTHNESS_DEFAULT = SMOOTHNESS_MIN + (SMOOTHNESS_MAX - SMOOTHNESS_MIN) / 2
     SMOOTHNESS_DEVIDER = 100
 
     # Расстояние, после которого перестаёт учитываться угол движения при интерполяции
     INTERPOLATION_THRESHOLD = 50
     INTERPOLATION_ANGLE_SCALE = 0.2
+    INTERPOLATION_TYPES = ['Instant', 'Linear', 'SDI*']
 
 
 class Ui:
@@ -35,19 +36,24 @@ class Methods:
 
 class Variables:
     ANIMATED_MOVEMENT = 200 # BOOL
+    INTERPOLATION_TYPE = 201 # STRING
 
 
 class ConfigKeys:
-    PATH = 'startup.path'
-    SCALE = 'startup.scale'
-    SMOOTH = 'startup.smooth'
+    WIDTH = 'window.width'
+    HEIGHT = 'window.height'
+    PATH = 'overlay.path'
+    SCALE = 'overlay.scale'
+    SMOOTH = 'overlay.smooth'
     UPDATE_OVERLAY_DELAY = 'overlay.update_delay'
-    ANIMATED_MOVEMENT = 'startup.animated_movement'
+    INTERPOLATION_TYPE = 'overlay.interpolation_type'
     
 
 class ConfigDefaults:
+    WIDTH = 300
+    HEIGHT = 300
     PATH = ''
     SCALE = 50
     SMOOTH = InterpolationParams.SMOOTHNESS_DEFAULT
     UPDATE_OVERLAY_DELAY = 15
-    ANIMATED_MOVEMENT = False
+    INTERPOLATION_TYPE = 0

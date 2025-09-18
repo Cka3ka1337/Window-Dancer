@@ -1,16 +1,15 @@
-from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QWidget,
-    QVBoxLayout
-)
-from PySide6.QtCore import (
-    Qt, QTimer, QPointF, Slot
-)
 from PySide6.QtGui import (
     QMouseEvent, QKeyEvent, QPainter,
     QBrush, QColor, QLinearGradient,
     QPaintEvent
 )
+from PySide6.QtWidgets import (
+    QApplication, QMainWindow, QWidget,
+    QVBoxLayout
+)
+from PySide6.QtCore import Qt, QTimer, QPointF, Slot
 
+from scripts.constants import *
 from scripts.config_system import ConfigSystem
 from modules.components.titlebar import TitleBar
 from modules.components.main_group import MainGroup
@@ -54,8 +53,8 @@ class MainWindow(QMainWindow):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setWindowOpacity(0)
         self.setFixedSize(
-            self.config.get('window.width'),
-            self.config.get('window.height')
+            self.config.get(ConfigKeys.WIDTH, ConfigDefaults.WIDTH),
+            self.config.get(ConfigKeys.HEIGHT, ConfigDefaults.HEIGHT)
         )
     
     

@@ -51,6 +51,9 @@ class SmoothedDirection:
     angle_norm = 0
     angle_scale = 0.2
     threshold = InterpolationParams.INTERPOLATION_THRESHOLD # distance px
+    
+    prev_start_pos = (0, 0)
+    override_start_pos = (0, 0)
 
         
     def next(self, start_pos: tuple, end_pos: tuple, smooth: float) -> tuple:
@@ -59,6 +62,13 @@ class SmoothedDirection:
         
         delta_x = ex - sx
         delta_y = ey - sy
+        
+        # if self.prev_start_pos == start_pos and self.override_start_pos != start_pos:
+        #     self.override_start_pos = start_pos
+        #     print(start_pos)
+        
+        # self.prev_start_pos = start_pos
+        
         
         try:
             distance = math.sqrt(delta_x ** 2 + delta_y ** 2)

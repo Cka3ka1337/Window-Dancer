@@ -1,19 +1,20 @@
-from PySide6.QtWidgets import (
-    QGroupBox, QVBoxLayout, QHBoxLayout
-)
 from PySide6.QtCore import Slot
+from PySide6.QtWidgets import QGroupBox, QVBoxLayout, QHBoxLayout
 
 from scripts.constants import *
 from scripts.shared import SharedData
 from modules.components.slider import Slider
 from modules.components.check_box import CheckBox
 from modules.components.combo_box import ComboBox
+from scripts.config_system import ConfigSystem
 from modules.components.buttons import (
     ChoiceGifButton, SetStartupButtom, ClearStartupButtom)
 
 
 class MainGroup(QGroupBox):
     shared = SharedData()
+    config = ConfigSystem()
+    
     
     def __init__(self):
         super().__init__()
@@ -41,7 +42,8 @@ class MainGroup(QGroupBox):
         self.config_set_btn = SetStartupButtom('Set Startup')
         self.config_clear_btn = ClearStartupButtom('Clear Startup')
         self.choice_gif_btn = ChoiceGifButton('Choice animation')
-        self.interpolation_combo = ComboBox(['Instant', 'Linear', 'SDI*'], 'Movement Mode')
+        self.interpolation_combo = ComboBox(InterpolationParams.INTERPOLATION_TYPES, 'Movement Mode', Variables.INTERPOLATION_TYPE)
+        self.interpolation_combo.slot(self.config.get(ConfigKeys.INTERPOLATION_TYPE, ConfigDefaults.INTERPOLATION_TYPE))
     
     
     def _init_ui(self) -> None:

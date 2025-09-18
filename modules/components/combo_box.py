@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QComboBox, QStyledItemDelegate, QSizePolicy
 
 from scripts.constants import *
@@ -14,7 +14,10 @@ class CenteredItemDelegate(QStyledItemDelegate):
         
 
 class ComboBox(QComboBox):
-    def __init__(self, items: list[str], tooltip: str=''):
+    shared = SharedData()
+    config = ConfigSystem()
+    
+    def __init__(self, items: list[str], tooltip: str='', shared_id: int=-1):
         super().__init__()
         self.addItems(items)
         self.setMaxVisibleItems(99)
@@ -22,3 +25,13 @@ class ComboBox(QComboBox):
         
         self.setItemDelegate(CenteredItemDelegate())
         self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        
+        self.items = items
+        self.shared_id = shared_id
+        self.currentIndexChanged.connect(self.slot)
+            
+    
+    @Slot()
+    def slot(self, e):
+        self.shared.set(self.shared_id, e)
+        self.setCurrentText(self.items[e])

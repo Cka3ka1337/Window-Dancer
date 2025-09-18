@@ -1,14 +1,8 @@
 import ctypes
 
-from PySide6.QtWidgets import (
-    QMainWindow, QVBoxLayout, QWidget
-)
-from PySide6.QtCore import (
-    Qt, QTimer, Slot
-)
-from PySide6.QtGui import (
-    QPainter, QPaintEvent
-)
+from PySide6.QtCore import Qt, QTimer, Slot
+from PySide6.QtGui import QPainter, QPaintEvent
+from PySide6.QtWidgets import QMainWindow, QVBoxLayout, QWidget
 
 from scripts.constants import *
 from scripts.shared import SharedData
@@ -94,12 +88,21 @@ class MainOverlay(QMainWindow):
     
     @Slot()
     def _update_window_pos(self) -> None:
-        # print(self.smooth)
-        target = get_target_position(self.size())
-        animated_movement = self.shared.get(Variables.ANIMATED_MOVEMENT)
+        type_idx = self.shared.get(Variables.INTERPOLATION_TYPE)
+        if type_idx is None:
+            type_idx = 0
+        # print(InterpolationParams.INTERPOLATION_TYPES[type_idx])
         
-        # offset_x, offset_y = self.SDInterpolation.next(self.overlay_pos.copy(), target, self.transform(self.smooth) / InterpolationParams.SMOOTHNESS_DEVIDER)
-        offset_x, offset_y = self.linear.next(self.overlay_pos.copy(), target, self.transform(self.smooth) / InterpolationParams.SMOOTHNESS_DEVIDER)
+        target = get_target_position(self.size())
+        
+        if not type_idx:
+            offset_x, offset_y = self.instant.next(self.overlay_pos.copy(), target)
+            
+        elif type_idx == 1:
+            offset_x, offset_y = self.linear.next(self.overlay_pos.copy(), target, self.transform(self.smooth) / InterpolationParams.SMOOTHNESS_DEVIDER)
+        
+        elif type_idx == 2:
+            offset_x, offset_y = self.SDInterpolation.next(self.overlay_pos.copy(), target, self.transform(self.smooth) / InterpolationParams.SMOOTHNESS_DEVIDER)
         
         self.overlay_pos[0] += offset_x
         self.overlay_pos[1] += offset_y

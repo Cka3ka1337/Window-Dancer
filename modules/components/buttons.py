@@ -16,10 +16,10 @@ class SetStartupButtom(QPushButton):
         
     
     def set_startup(self) -> None:
-        self.config.set(ConfigKeys.PATH,              self.shared.get(Methods.MOVIE_GET)())
-        self.config.set(ConfigKeys.SCALE,             self.shared.get(Methods.SCALE_GET)())
-        self.config.set(ConfigKeys.ANIMATED_MOVEMENT, self.shared.get(Variables.ANIMATED_MOVEMENT))
-        self.config.set(ConfigKeys.SMOOTH,            self.shared.get(Methods.SMOOTH_GET)())
+        self.config.set(ConfigKeys.PATH,               self.shared.get(Methods.MOVIE_GET)())
+        self.config.set(ConfigKeys.SCALE,              self.shared.get(Methods.SCALE_GET)())
+        self.config.set(ConfigKeys.SMOOTH,             self.shared.get(Methods.SMOOTH_GET)())
+        self.config.set(ConfigKeys.INTERPOLATION_TYPE, self.shared.get(Variables.INTERPOLATION_TYPE))
         self.config.save_config()
 
 
@@ -33,10 +33,10 @@ class ClearStartupButtom(QPushButton):
         
     
     def set_startup(self) -> None:
-        self.config.set(ConfigKeys.PATH,              ConfigDefaults.PATH)
-        self.config.set(ConfigKeys.scale,             ConfigDefaults.SCALE)
-        self.config.set(ConfigKeys.ANIMATED_MOVEMENT, ConfigDefaults.ANIMATED_MOVEMENT)
-        self.config.set(ConfigKeys.SMOOTH,            ConfigDefaults.SMOOTH)
+        self.config.set(ConfigKeys.PATH,               ConfigDefaults.PATH)
+        self.config.set(ConfigKeys.SCALE,              ConfigDefaults.SCALE)
+        self.config.set(ConfigKeys.SMOOTH,             ConfigDefaults.SMOOTH)
+        self.config.set(ConfigKeys.INTERPOLATION_TYPE, ConfigDefaults.INTERPOLATION_TYPE)
         self.config.save_config()
 
 

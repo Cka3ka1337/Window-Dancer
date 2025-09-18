@@ -48,18 +48,17 @@ class ConfigSystem:
     def get_default_config(self):
         return {
             'window': {
-                'width': 300,
-                'height': 300
+                'width': ConfigDefaults.WIDTH,
+                'height': ConfigDefaults.HEIGHT
             },
             'overlay': {
-                'update_delay': 10
-            },
-            'startup': {
+                'update_delay': ConfigDefaults.UPDATE_OVERLAY_DELAY,
                 'path': ConfigDefaults.PATH,
                 'scale': ConfigDefaults.SCALE,
-                'animated_movement': ConfigDefaults.ANIMATED_MOVEMENT,
                 'smooth': ConfigDefaults.SMOOTH
-            }
+            },
+            # 'startup': {
+            # }
         }
     
     

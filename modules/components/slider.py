@@ -26,10 +26,3 @@ class Slider(QSlider):
         
         value = self.shared.get(self.get_id)()
         self.setValue(value)
-        
-    
-    # def set_scale(self, scale: float) -> None:
-    #     self.setValue(
-    #         scale
-    #     )
-    #     print(self.min + (self.max - self.min) * scale, self.get_id, scale)
