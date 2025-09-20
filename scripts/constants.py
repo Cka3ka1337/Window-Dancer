@@ -1,3 +1,14 @@
+class LocalPath:
+    path = ''
+    __instance = None
+    
+    def __new__(cls):
+        if cls.__instance is None:
+            cls.__instance = super(LocalPath, cls).__new__(cls)
+            
+        return cls.__instance
+    
+
 class InterpolationParams:
     SMOOTHNESS_MIN = 2
     SMOOTHNESS_MAX = SMOOTHNESS_MIN + 20

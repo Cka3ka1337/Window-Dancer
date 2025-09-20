@@ -1,11 +1,13 @@
+import os
+
 from PySide6.QtGui import (
     QMouseEvent, QKeyEvent, QPainter,
     QBrush, QColor, QLinearGradient,
-    QPaintEvent
+    QPaintEvent, QIcon, QAction,
 )
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget,
-    QVBoxLayout
+    QVBoxLayout, QSystemTrayIcon, QMenu
 )
 from PySide6.QtCore import Qt, QTimer, QPointF, Slot
 
@@ -13,6 +15,7 @@ from scripts.constants import *
 from scripts.config_system import ConfigSystem
 from modules.components.titlebar import TitleBar
 from modules.components.main_group import MainGroup
+from modules.components.tray import SystemTrayIcon
 
 
 class MainWindow(QMainWindow):
@@ -20,6 +23,7 @@ class MainWindow(QMainWindow):
     _drag_position = None
     _opacity = 0
     config = ConfigSystem()
+    local_path = LocalPath()
     
     
     def __init__(self):
@@ -27,6 +31,14 @@ class MainWindow(QMainWindow):
         self._init_window()
         self._init_ui()
         self._init_timers()
+        self._init_tray()
+    
+    
+    def _init_tray(self) -> None:
+        path = os.path.join(self.local_path.path, 'resources/layer.ico')
+        
+        self.tray = SystemTrayIcon(path, self)
+        self.tray.show()
         
     
     def _init_timers(self) -> None:
@@ -48,6 +60,8 @@ class MainWindow(QMainWindow):
     
     
     def _init_window(self) -> None:
+        path = os.path.join(self.local_path.path, 'resources/layer.ico')
+        
         self.setWindowTitle('MainWindow')
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
@@ -56,6 +70,7 @@ class MainWindow(QMainWindow):
             self.config.get(ConfigKeys.WIDTH, ConfigDefaults.WIDTH),
             self.config.get(ConfigKeys.HEIGHT, ConfigDefaults.HEIGHT)
         )
+        self.setWindowIcon(QIcon(path))
     
     
     @Slot()
