@@ -1,16 +1,21 @@
 import os
 import sys
+import json
 
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication
 
 from modules.ui import MainWindow
 from modules.overlay import MainOverlay
+from scripts.constants import LocalPath
 from scripts.config_system import ConfigSystem
-        
+
     
 def update_style(app) -> None:
-    path = os.path.join(os.path.dirname(__file__), 'resources/style.qss')
+    local_path = LocalPath()
+    
+    path = os.path.join(local_path.path, 'resources/style.qss')
+    
     with open(path, 'r') as file:
         style = file.read()
         app.setStyleSheet(style)
@@ -18,9 +23,10 @@ def update_style(app) -> None:
 
 def main() -> None:
     config = ConfigSystem()
-    print(config.config)
+    print(json.dumps(config.config, indent=4))
     
     app = QApplication(sys.argv)
+    app.setQuitOnLastWindowClosed(False)
     
     update_style(app)
     update_style_timer = QTimer()
@@ -37,4 +43,5 @@ def main() -> None:
 
 
 if __name__ == '__main__':
+    LocalPath().path = os.path.dirname(__file__)
     main()

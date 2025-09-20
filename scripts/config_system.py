@@ -2,9 +2,10 @@ import os
 import tomllib
 
 import tomli_w
-import win32api
 
 from pathlib import Path
+
+from scripts.constants import *
 
 
 class ConfigSystem:
@@ -13,6 +14,7 @@ class ConfigSystem:
     _config_path = os.path.join(
         'C:/Users', os.getlogin(), 'Documents/Window-Dancer/config.toml'
     )
+
 
     def save_config(self):
         try:
@@ -46,18 +48,17 @@ class ConfigSystem:
     def get_default_config(self):
         return {
             'window': {
-                'width': 300,
-                'height': 300
+                'width': ConfigDefaults.WIDTH,
+                'height': ConfigDefaults.HEIGHT
             },
             'overlay': {
-                'update_pos_delay_ms': 10
+                'update_delay': ConfigDefaults.UPDATE_OVERLAY_DELAY,
+                'path': ConfigDefaults.PATH,
+                'scale': ConfigDefaults.SCALE,
+                'smooth': ConfigDefaults.SMOOTH
             },
-            'startup': {
-                'path': '',
-                'scale': 0.5,
-                'animated_movement': False,
-                'smoothness': 0.125
-            }
+            # 'startup': {
+            # }
         }
     
     
@@ -73,6 +74,9 @@ class ConfigSystem:
             return value
         
         except (KeyError, TypeError):
+            if default is not None:
+                self.set(key, default)
+                
             return default
     
     
@@ -88,7 +92,6 @@ class ConfigSystem:
             config = config[k]
         
         config[keys[-1]] = value
-        self.save_config()
     
     
     def __new__(cls):

@@ -1,19 +1,21 @@
-from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QWidget,
-    QVBoxLayout
-)
-from PySide6.QtCore import (
-    Qt, QTimer, QPointF, Slot
-)
+import os
+
 from PySide6.QtGui import (
     QMouseEvent, QKeyEvent, QPainter,
     QBrush, QColor, QLinearGradient,
-    QPaintEvent
+    QPaintEvent, QIcon, QAction,
 )
+from PySide6.QtWidgets import (
+    QApplication, QMainWindow, QWidget,
+    QVBoxLayout, QSystemTrayIcon, QMenu
+)
+from PySide6.QtCore import Qt, QTimer, QPointF, Slot
 
+from scripts.constants import *
+from scripts.config_system import ConfigSystem
 from modules.components.titlebar import TitleBar
 from modules.components.main_group import MainGroup
-from scripts.config_system import ConfigSystem
+from modules.components.tray import SystemTrayIcon
 
 
 class MainWindow(QMainWindow):
@@ -21,12 +23,22 @@ class MainWindow(QMainWindow):
     _drag_position = None
     _opacity = 0
     config = ConfigSystem()
+    local_path = LocalPath()
+    
     
     def __init__(self):
         super().__init__()
         self._init_window()
         self._init_ui()
         self._init_timers()
+        self._init_tray()
+    
+    
+    def _init_tray(self) -> None:
+        path = os.path.join(self.local_path.path, 'resources/layer.ico')
+        
+        self.tray = SystemTrayIcon(path, self)
+        self.tray.show()
         
     
     def _init_timers(self) -> None:
@@ -48,14 +60,17 @@ class MainWindow(QMainWindow):
     
     
     def _init_window(self) -> None:
+        path = os.path.join(self.local_path.path, 'resources/layer.ico')
+        
         self.setWindowTitle('MainWindow')
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setWindowOpacity(0)
         self.setFixedSize(
-            self.config.get('window.width'),
-            self.config.get('window.height')
+            self.config.get(ConfigKeys.WIDTH, ConfigDefaults.WIDTH),
+            self.config.get(ConfigKeys.HEIGHT, ConfigDefaults.HEIGHT)
         )
+        self.setWindowIcon(QIcon(path))
     
     
     @Slot()
@@ -78,8 +93,8 @@ class MainWindow(QMainWindow):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         gradient = QLinearGradient(QPointF(0, 0), QPointF(self.width(), self.height()))
-        gradient.setColorAt(0.0, QColor(20, 10, 40, 240))
-        gradient.setColorAt(1.0, QColor(15, 30, 70, 200))
+        gradient.setColorAt(0.0, QColor(20, 10, 40, 240)) # #140A28
+        gradient.setColorAt(1.0, QColor(15, 30, 70, 200)) # #0F1E46
         
         painter.setBrush(QBrush(gradient))
         painter.setPen(Qt.PenStyle.SolidLine)
