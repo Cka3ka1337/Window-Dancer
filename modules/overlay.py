@@ -91,7 +91,6 @@ class MainOverlay(QMainWindow):
         type_idx = self.shared.get(Variables.INTERPOLATION_TYPE)
         if type_idx is None:
             type_idx = 0
-        # print(InterpolationParams.INTERPOLATION_TYPES[type_idx])
         
         target = get_target_position(self.size())
         
